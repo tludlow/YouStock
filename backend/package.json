@@ -1,0 +1,19 @@
+{
+  "name": "YouStock-Backend",
+  "version": "1.0.0",
+  "description": "The backend for a site where people sell their things.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "author": "Thomas Ludlow",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "http": "^0.0.0",
+    "jsonwebtoken": "^8.1.0",
+    "mysql": "^2.15.0"
+  }
+}
