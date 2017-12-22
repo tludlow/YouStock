@@ -34,6 +34,22 @@ router.post("/create", jwtAuthenticator, (req,res)=> {
             if (err) throw err;
             res.status(200).send({ok: true, title, body, posted_by, image});
         });
+        connection.release();
+    });
+});
+
+router.get("/frontpage", (req, res)=> {
+    db.getConnection((err, connection)=> {
+        connection.query("SELECT * FROM posts LIMIT 30", (err, results, fields)=> {
+            if (err) throw err;
+            if(results.length == 0) {
+                res.status(200).send({ok: false, error: "No posts exist!"});
+                return;
+            } else {
+                res.status(200).send({ok: true, results});
+            }
+        });
+        connection.release();
     });
 });
 
