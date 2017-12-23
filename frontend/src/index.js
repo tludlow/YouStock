@@ -20,6 +20,7 @@ import App from './components/App';
   Import Views
 */
 import Home from "./views/Home";
+import FourOFour from "./views/FourOFour";
 
 /* Import our data store */
 import store, {history} from './store';
@@ -35,6 +36,7 @@ render(
       <Route path="/" component={App}>
         <IndexRoute component={Home} />
       </Route>
+      <Route path="/*" component={FourOFour} />
     </Router>
   </Provider>,
   document.getElementById('root')
