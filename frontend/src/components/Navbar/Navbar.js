@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, browserHistory} from "react-router";;
+import {Link} from "react-router";;
 
 export default class Navbar extends Component {
 
@@ -27,7 +27,8 @@ export default class Navbar extends Component {
 						<div className="collapse navbar-collapse clearfix" id="bs-example-navbar-collapse-1">
 							<ul className="nav navbar-nav navbar-right">
 								<li className="hidden"><a href="#page-top">Page Top</a></li>
-								<li>Home</li>
+								<li><Link to="/">Home</Link></li>
+								<li><Link to="/user">Login / Signup</Link></li>
 							</ul>
 						</div>
 					</div>

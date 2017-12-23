@@ -17,6 +17,18 @@ h1 {
     font-weight: bold;
 }
 
+input[type=text], input[type=email], input[type=password], input[type=date], select, textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: black;
+    font-weight: 600;
+}
+
 .navbar {
     background-color: black;
     color: white;
@@ -44,10 +56,18 @@ h1 {
             transition: ease-in-out .3s;
         }
     }
-    .navbar-nav>li {
+    .navbar-nav>li>a {
         font-weight: 600;
         font-size: 1.9rem;
-        padding-top: 4px;
+        margin-top: 4px;
+        line-height: 0px;
+        color: white;
+        margin-left: 20px;
+        transition: ease-in-out .3s;
+        &:hover {
+            color: darken(white, 20);
+            transition: ease-in-out .3s;
+        }
     }
 }
 
@@ -80,6 +100,59 @@ h1 {
         text-align: center !important;
     }
 }
+.title {
+    font-weight: bold;
+}
+.auth-button {
+    font-weight: 600;
+    padding: 6px;
+    border-radius: 4px;
+    background-color: red;
+    text-align: center;
+    color: white;
+    font-size: 1.9rem;
+    cursor: pointer;
+}
+
+.signUpForm, .loginForm {
+    fieldset {
+        p {
+          color: black;
+          font-weight: bold;
+          margin-top: 20px;
+        }
+        small {
+          color: black;
+          font-size: 14px;
+        }
+    }
+    button {
+        margin-top: 15px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .sk-circle {
     $circleCount: 12;

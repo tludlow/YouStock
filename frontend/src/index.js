@@ -21,6 +21,7 @@ import App from './components/App';
 */
 import Home from "./views/Home";
 import FourOFour from "./views/FourOFour";
+import UserAuth from "./views/UserAuth";
 
 /* Import our data store */
 import store, {history} from './store';
@@ -35,6 +36,7 @@ render(
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={Home} />
+        <Route path="/user" component={UserAuth} />
       </Route>
       <Route path="/*" component={FourOFour} />
     </Router>

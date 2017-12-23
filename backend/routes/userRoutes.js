@@ -52,7 +52,7 @@ var validPassword = function(password, hash){
     return bcrypt.compareSync(password, hash);
 }
 
-router.post("/create", (req, res)=> {
+router.post("/signup", (req, res)=> {
     const { username, email, password } = req.body;
     const toInsert = {username, email, password: generateHash(password)};
     db.getConnection((err, connection)=> {

@@ -22,7 +22,11 @@ const enhancers = compose(applyMiddleware(thunk), window.devToolsExtension
 // Define the initial state here so that there isnt an error when referencing it
 // in components
 const initialState = {
-  
+    user: {
+        loggedIn: false,
+        username: "",
+        token: "",
+    }
 };
 
 const persistedState = loadState();

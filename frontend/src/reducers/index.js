@@ -12,7 +12,9 @@ import {combineReducers} from 'redux';
 
 import {routerReducer} from 'react-router-redux'; // we need this for react-router
 
+import auth from "./auth";
+
 // Combine all our reducers togeher
-const rootReducer = combineReducers({routing: routerReducer});
+const rootReducer = combineReducers({auth, routing: routerReducer});
 
 export default rootReducer;
