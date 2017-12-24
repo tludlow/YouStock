@@ -40,6 +40,15 @@ class PostForm extends Component {
             this.setState({errors: "Your file is too large, please dont upload a file larger than 1.5 MB"});
             return;
         }
+        if(!/^[0-9.]$/.test(cost)) {
+            this.setState({errors: "The cost should be a number, it can also contain a period/fullstop."});
+            return;
+        }
+        if(this.state.description.length > 400) {
+            this.setState({errors: "Your description is too long. It should be a maximum of 400 characters long."});
+            return;
+        }
+
 
         var formData = new FormData();
         formData.append("title", title);
@@ -50,7 +59,8 @@ class PostForm extends Component {
         formData.append("cost", cost);
         const config = {
             headers: {
-                "content-type": "multipart/form-data"
+                "content-type": "multipart/form-data",
+                'Authorization': `Token ${this.props.user.token}`
             }
         };
         axios.post("http://localhost:3001/post/create", formData, config).then((response)=> {
@@ -96,6 +106,7 @@ class PostForm extends Component {
                         <input type="text" ref="postFormCost" required/>
                     </fieldset>
 
+                    {this.state.errors ? <p className="error">{this.state.errors}</p> : ""}
                     <button type="submit" className="btn btn-success submit">
 					    Create New Post
 				    </button>

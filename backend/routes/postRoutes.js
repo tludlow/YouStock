@@ -19,12 +19,11 @@ var jwtAuthenticator = async (req, res, next)=> {
         var decodedToken = await jwt.verify(token, jwtSecret);
         next();
     } catch (err) {
-        console.log(err);
         res.status(200).send({ok: false, error: "Invalid auth token"});
     }
 };
 
-router.post("/create", upload.single("image"), (req,res)=> {
+router.post("/create", jwtAuthenticator, upload.single("image"), (req,res)=> {
     const { title, body, posted_by, token, cost } = req.body;
     var newFileName = `${new Date().getTime()}-${req.file.originalname}`
     const toInsert = {
