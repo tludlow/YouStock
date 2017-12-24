@@ -24,6 +24,8 @@ const enhancers = compose(applyMiddleware(thunk), window.devToolsExtension
 const initialState = {
     user: {
         loggedIn: false,
+        loading: false,
+        errors: "",
         username: "",
         token: "",
     }

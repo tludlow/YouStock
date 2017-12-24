@@ -11,12 +11,15 @@ export function userSignUpSuccess(user) {
 export function userSignUpFailure(err) {
     return {type: 'USER_SIGNUP_FAILURE', error: err}
 }
+export function userLogout() {
+    return {type: 'USER_LOGOUT'}
+}
 
 //Create a new user on form submit.
-export function signUpUser(username, password, email) {
+export function signUpUser(username, email, password) {
     return dispatch => {
         dispatch(userSignUpRequest());
-        return axios.post('http://localhost:7770/user/signup', {username, password, email}).then((response) => {
+        return axios.post('http://localhost:3001/user/signup', {username, password, email}).then((response) => {
             localStorage.setItem("token", response.data.token);
             dispatch(userSignUpSuccess(response.data));
             browserHistory.push("/");
@@ -24,4 +27,10 @@ export function signUpUser(username, password, email) {
             dispatch(userSignUpFailure("An error occured creating your user."));
         });
     };
+}
+
+export function logoutUser() {
+    localStorage.removeItem("token");
+    browserHistory.push("/");
+    return {type: 'USER_LOGOUT'}
 }

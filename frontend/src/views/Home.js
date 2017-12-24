@@ -30,30 +30,29 @@ export default class Home extends Component {
 			return (
 				<div className="homepage">
 					<Navbar />
-					<div className="container">
 						<div class="sk-circle">
-								<div class="sk-circle1 sk-child"></div>
-								<div class="sk-circle2 sk-child"></div>
-								<div class="sk-circle3 sk-child"></div>
-								<div class="sk-circle4 sk-child"></div>
-								<div class="sk-circle5 sk-child"></div>
-								<div class="sk-circle6 sk-child"></div>
-								<div class="sk-circle7 sk-child"></div>
-								<div class="sk-circle8 sk-child"></div>
-								<div class="sk-circle9 sk-child"></div>
-								<div class="sk-circle10 sk-child"></div>
-								<div class="sk-circle11 sk-child"></div>
-								<div class="sk-circle12 sk-child"></div>
-							</div>
-						<h3 className="loading" >Loading data...</h3>
-					</div>
+							<div className="sk-circle1 sk-child"></div>
+							<div className="sk-circle2 sk-child"></div>
+							<div className="sk-circle3 sk-child"></div>
+							<div className="sk-circle4 sk-child"></div>
+							<div className="sk-circle5 sk-child"></div>
+							<div className="sk-circle6 sk-child"></div>
+							<div className="sk-circle7 sk-child"></div>
+							<div className="sk-circle8 sk-child"></div>
+							<div className="sk-circle9 sk-child"></div>
+							<div className="sk-circle10 sk-child"></div>
+							<div className="sk-circle11 sk-child"></div>
+							<div className="sk-circle12 sk-child"></div>
+						</div>
+					<h3 className="loading" >Loading data...</h3>
 				</div>
 			);
-		} else {
+		} else if(this.state.data) {
 			return (
 				<div className="homepage">
 					<Navbar />
 					<div className="container">
+						<h3 className="home-title">The most recent posts on the site curated just for you.</h3>
 						<div className="row post-row">
 							{this.state.data.map((post, i)=> (
 								<div className="col-xs-3">
@@ -64,6 +63,18 @@ export default class Home extends Component {
 									</div>
 								</div>	
 							))}
+						</div>
+					</div>
+				</div>
+			);
+		} else {
+			return (
+				<div className="homepage">
+					<Navbar />
+					<div className="container">
+						<h3 className="home-title">The most recent posts on the site curated just for you.</h3>
+						<div className="row post-row">
+							<h3>There are no created posts.</h3>
 						</div>
 					</div>
 				</div>

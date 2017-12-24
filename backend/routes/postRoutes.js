@@ -40,7 +40,7 @@ router.post("/create", jwtAuthenticator, (req,res)=> {
 
 router.get("/frontpage", (req, res)=> {
     db.getConnection((err, connection)=> {
-        connection.query("SELECT * FROM posts WHERE removed = 0 LIMIT 30", (err, results, fields)=> {
+        connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT 30", (err, results, fields)=> {
             if (err) throw err;
             if(results.length == 0) {
                 res.status(200).send({ok: false, error: "No posts exist!"});

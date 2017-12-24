@@ -8,13 +8,36 @@ class Signup extends Component {
 		super(props);
 		this.state = {
 			errorMessage: "",
-			view: "signin"
+			view: "signin",
+			errors: ""
 		};
-    }
+	}
+	
+	componentDidMount(){
+		this.setState({errors: ""});
+	}
+	onSignup(e) {
+		e.preventDefault();
+		var username = this.refs.signUpUsername.value;
+		var email = this.refs.signUpEmail.value;
+		var password = this.refs.signUpPassword.value;
+		var confirmPassword = this.refs.signUpPasswordConfirm.value;
+
+		if(password != confirmPassword) {
+			this.setState({errors: "Your password's don't match."});
+			return false;
+		}
+		if(username.length > 28) {
+			this.setState({errors: "Your username should not be greater than 28 characters in length."});
+			return false;
+		}
+
+		this.props.signUpUser(username, email, password);
+	}
 
 	render() {
 		return (
-            <form className="signUpForm">			
+            <form className="signUpForm" onSubmit={(e)=> this.onSignup(e)}>			
 					<fieldset>
 						<p>Username</p>
 						<input type="text" placeholder="Username" className="username" ref="signUpUsername" required/>
@@ -35,6 +58,7 @@ class Signup extends Component {
 						<input type="password" placeholder="Confirm Password" className="password" ref="signUpPasswordConfirm" required/>
 					</fieldset>
 
+					{this.state.errors.length > 1 ? <p className="error">{this.state.errors}</p> : ""}
 					<button type="submit" className="btn btn-success submit">
 						Sign Up
 					</button>

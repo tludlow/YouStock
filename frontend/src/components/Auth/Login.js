@@ -12,6 +12,10 @@ class Login extends Component {
 		};
     }
 
+	onLogin() {
+
+	}
+	
 	render() {
 		return (
             <form className="loginForm">			

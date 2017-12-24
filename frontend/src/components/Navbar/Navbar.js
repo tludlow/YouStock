@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
-import {Link} from "react-router";;
+import {Link} from "react-router";
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as actionCreators from '../../actions/actionCreators';
 
-export default class Navbar extends Component {
+class Navbar extends Component {
 
-
-	
+	logoutUser() {
+		this.props.logoutUser();
+	}
 	render() {
 
 		//Render the html navbar to the user.
@@ -28,7 +32,9 @@ export default class Navbar extends Component {
 							<ul className="nav navbar-nav navbar-right">
 								<li className="hidden"><a href="#page-top">Page Top</a></li>
 								<li><Link to="/">Home</Link></li>
-								<li><Link to="/user">Login / Signup</Link></li>
+								{this.props.user.loggedIn == false ? <li><Link to="/user">Login / Signup</Link></li> : ""}
+								{this.props.user.loggedIn ? <li>{this.props.user.username} </li> : ""}
+								{this.props.user.loggedIn ? <li onClick={()=> this.logoutUser()}>Logout</li> : ""}
 							</ul>
 						</div>
 					</div>
@@ -37,3 +43,15 @@ export default class Navbar extends Component {
 		);
 	}
 }
+
+function mapStateToProps(state) {
+	return {user: state.user};
+}
+
+export function mapDispatchToProps(dispatch) {
+	return bindActionCreators(actionCreators, dispatch);
+}
+
+var NavbarClass = connect(mapStateToProps, mapDispatchToProps)(Navbar);
+
+export default NavbarClass;
