@@ -11,6 +11,15 @@ export function userSignUpSuccess(user) {
 export function userSignUpFailure(err) {
     return {type: 'USER_SIGNUP_FAILURE', error: err}
 }
+export function userLoginRequest() {
+    return {type: 'USER_LOGIN_REQUEST'}
+}
+export function userLoginSuccess(user) {
+    return {type: 'USER_LOGIN_SUCCESS', data: user}
+}
+export function userLoginFailure(err) {
+    return {type: 'USER_LOGIN_FAILURE', error: err}
+}
 export function userLogout() {
     return {type: 'USER_LOGOUT'}
 }
@@ -20,13 +29,34 @@ export function signUpUser(username, email, password) {
     return dispatch => {
         dispatch(userSignUpRequest());
         return axios.post('http://localhost:3001/user/signup', {username, password, email}).then((response) => {
-            localStorage.setItem("token", response.data.token);
-            dispatch(userSignUpSuccess(response.data));
-            browserHistory.push("/");
+            if(response.data.ok === false) {
+                dispatch(userSignUpFailure(response.data.error));
+            } else {
+                localStorage.setItem("token", response.data.token);
+                dispatch(userSignUpSuccess(response.data));
+                browserHistory.push("/");
+            }
         }).catch((err2) => {
             dispatch(userSignUpFailure("An error occured creating your user."));
         });
     };
+}
+
+export function loginUser(username, password) {
+    return dispatch => {
+        return axios.post('http://localhost:3001/user/login', {username, password}).then((response) => {
+            console.log(response);
+            if(response.data.ok === false) {
+                dispatch(userLoginFailure(response.data.error));
+            } else {
+                localStorage.setItem("token", response.data.token);
+                dispatch(userLoginSuccess(response.data));
+                browserHistory.push("/");
+            }
+        }).catch((err2) => {
+            dispatch(userLoginFailure("An error occured logging in your user."));
+        });
+    }
 }
 
 export function logoutUser() {

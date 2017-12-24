@@ -96,7 +96,7 @@ router.post("/login", (req, res)=> {
                         //login
                         let dataJWT = {username: returned.username, email: returned.email, iat: Math.floor(Date.now() / 1000) - 30};
                         const token = jwt.sign(dataJWT, jwtSecret);
-                        res.status(200).send({ok: true, token});
+                        res.status(200).send({ok: true, username, token});
                     } else {
                         //warn error
                         res.status(200).send({ok: false, error: "Incorrect login details have been provided"});

@@ -32,9 +32,9 @@ class Navbar extends Component {
 							<ul className="nav navbar-nav navbar-right">
 								<li className="hidden"><a href="#page-top">Page Top</a></li>
 								<li><Link to="/">Home</Link></li>
-								{this.props.user.loggedIn == false ? <li><Link to="/user">Login / Signup</Link></li> : ""}
-								{this.props.user.loggedIn ? <li>{this.props.user.username} </li> : ""}
-								{this.props.user.loggedIn ? <li onClick={()=> this.logoutUser()}>Logout</li> : ""}
+								{this.props.user.loggedIn === false ? <li><Link to="/user">Login / Signup</Link></li> : ""}
+								{this.props.user.loggedIn ? <li className="nav-username">{this.props.user.username} </li> : ""}
+								{this.props.user.loggedIn ? <li onClick={()=> this.logoutUser()}><i className="fa fa-arrow-down logout-button"></i></li> : ""}
 							</ul>
 						</div>
 					</div>

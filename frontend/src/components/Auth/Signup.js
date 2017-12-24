@@ -7,8 +7,6 @@ class Signup extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			errorMessage: "",
-			view: "signin",
 			errors: ""
 		};
 	}
@@ -23,7 +21,7 @@ class Signup extends Component {
 		var password = this.refs.signUpPassword.value;
 		var confirmPassword = this.refs.signUpPasswordConfirm.value;
 
-		if(password != confirmPassword) {
+		if(password !== confirmPassword) {
 			this.setState({errors: "Your password's don't match."});
 			return false;
 		}
@@ -59,6 +57,8 @@ class Signup extends Component {
 					</fieldset>
 
 					{this.state.errors.length > 1 ? <p className="error">{this.state.errors}</p> : ""}
+					{this.props.user.errors.length > 1 ? <p className="error">{this.props.user.errors}</p> : ""}
+
 					<button type="submit" className="btn btn-success submit">
 						Sign Up
 					</button>

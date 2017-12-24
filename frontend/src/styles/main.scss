@@ -30,7 +30,7 @@ input[type=text], input[type=email], input[type=password], input[type=date], sel
 }
 
 .navbar {
-    background-color: black;
+    background-color: rgb(28, 28, 29);
     color: white;
     border: none;
     border-radius: 0px;
@@ -137,6 +137,16 @@ input[type=text], input[type=email], input[type=password], input[type=date], sel
 }
 .error {
     color: red;
+}
+.logout-button {
+    padding-left: 4px;
+    margin-top: 12px;
+}
+.nav-username {
+    font-weight: 600;
+    margin-top: 5px;
+    margin-left: 20px;
+    font-size: 19px;
 }
 
 

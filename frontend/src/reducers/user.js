@@ -9,6 +9,12 @@ function user(state = {}, action) {
 			return {...state, loading: false, errors: action.error}
 		case 'USER_SIGNUP_SUCCESS':
 			return {...state, loading: false, loggedIn: true, token: action.data.token, username: action.data.username}
+		case 'USER_LOGIN_REQUEST':
+			return {...state, loading: true}
+		case 'USER_LOGIN_FAILURE':
+			return {...state, loading: false, errors: action.error}
+		case 'USER_LOGIN_SUCCESS':
+			return {...state, loading: false, loggedIn: true, token: action.data.token, username: action.data.username}
 		default:
 			return state;
 	}
