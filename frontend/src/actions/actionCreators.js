@@ -45,7 +45,6 @@ export function signUpUser(username, email, password) {
 export function loginUser(username, password) {
     return dispatch => {
         return axios.post('http://localhost:3001/user/login', {username, password}).then((response) => {
-            console.log(response);
             if(response.data.ok === false) {
                 dispatch(userLoginFailure(response.data.error));
             } else {

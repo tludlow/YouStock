@@ -26,6 +26,16 @@ import UserAuth from "./views/UserAuth";
 /* Import our data store */
 import store, {history} from './store';
 
+//Authentication and stuff
+function requireAuth() {
+  return(nextState, replace) => {
+    let currentState = store.getState();
+    if(!currentState.user.loggedIn) {
+      replace({ pathname: "/user" });
+    }
+  };
+}
+
 /*
   Rendering
   This is where we hook up the Store with our actual component and the router

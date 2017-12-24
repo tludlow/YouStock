@@ -8,13 +8,13 @@ function user(state = {}, action) {
 		case 'USER_SIGNUP_FAILURE':
 			return {...state, loading: false, errors: action.error}
 		case 'USER_SIGNUP_SUCCESS':
-			return {...state, loading: false, loggedIn: true, token: action.data.token, username: action.data.username}
+			return {...state, loading: false, loggedIn: true, token: action.data.token, username: action.data.username, errors: ""}
 		case 'USER_LOGIN_REQUEST':
 			return {...state, loading: true}
 		case 'USER_LOGIN_FAILURE':
 			return {...state, loading: false, errors: action.error}
 		case 'USER_LOGIN_SUCCESS':
-			return {...state, loading: false, loggedIn: true, token: action.data.token, username: action.data.username}
+			return {...state, loading: false, loggedIn: true, token: action.data.token, username: action.data.username, errors: ""}
 		default:
 			return state;
 	}

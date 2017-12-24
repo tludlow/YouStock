@@ -54,6 +54,18 @@ if (module.hot) {
 
 store.subscribe(throttle(() => {
   const state = store.getState();
+
+
+
+  var toSave = {
+    user: {
+      loggedIn: state.user.loggedIn,
+      loading: state.user.loading,
+      errors: "",
+      username: state.user.username,
+      token: state.user.token,
+    }
+  };
   // var userAssigner = "";
   // if (typeof state.user.data.username !== "undefined") {
   //   userAssigner = state.user.data.username;
@@ -73,7 +85,7 @@ store.subscribe(throttle(() => {
   //     data: state.jobs.data
   //   }
   // };
-  saveState(state);
+  saveState(toSave);
 }, 500));
 
 export default store;

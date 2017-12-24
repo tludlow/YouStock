@@ -3,6 +3,7 @@ import axios from "axios";
 import {browserHistory} from "react-router";
 
 import Navbar from "../components/Navbar/Navbar";
+import Frontpage from "../components/Frontpage/Frontpage";
 export default class Home extends Component {
 
 	constructor(props) {
@@ -26,6 +27,11 @@ export default class Home extends Component {
 	}
 
 	render() {
+		if(!this.props.user.loggedIn) {
+			return (
+				<Frontpage />
+			);
+		}
 		if(this.state.loading) {
 			return (
 				<div className="homepage">
@@ -55,7 +61,7 @@ export default class Home extends Component {
 						<h3 className="home-title">The most recent posts on the site curated just for you.</h3>
 						<div className="row post-row">
 							{this.state.data.map((post, i)=> (
-								<div className="col-xs-3">
+								<div className="col-xs-3" key={i}>
 									<div className="post" key={i} onClick={()=> this.redirectToPost(post.post_id)}>
 										<img src={"http://via.placeholder.com/150x150"} alt={post.title}/>
 										<h5>{post.title}</h5>

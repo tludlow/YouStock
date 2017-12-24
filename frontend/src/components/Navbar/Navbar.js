@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from "react-router";
+import {Link, browserHistory} from "react-router";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../actions/actionCreators';
@@ -8,6 +8,7 @@ class Navbar extends Component {
 
 	logoutUser() {
 		this.props.logoutUser();
+		browserHistory.push("/");
 	}
 	render() {
 
