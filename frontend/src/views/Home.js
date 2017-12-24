@@ -63,7 +63,7 @@ export default class Home extends Component {
 							{this.state.data.map((post, i)=> (
 								<div className="col-xs-3" key={i}>
 									<div className="post" key={i} onClick={()=> this.redirectToPost(post.post_id)}>
-										<img src={"http://via.placeholder.com/150x150"} alt={post.title}/>
+										<img src={"http://localhost:3001/img/uploads/" + post.image} alt={post.title}/>
 										<h5>{post.title}</h5>
 										<p>£{post.cost}</p>
 									</div>

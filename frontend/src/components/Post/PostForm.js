@@ -3,6 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../actions/actionCreators';
 import axios from "axios";
+import {browserHistory} from "react-router";
 
 class PostForm extends Component {
 
@@ -53,7 +54,11 @@ class PostForm extends Component {
             }
         };
         axios.post("http://localhost:3001/post/create", formData, config).then((response)=> {
-            console.log(response);
+            if(response.data.ok === true) {
+                browserHistory.push("/");
+            } else {
+                console.log(response);
+            }
         }).catch((error)=> {
             console.log(error);
         });

@@ -4,7 +4,7 @@ const db = require("../database");
 const jwt = require("jsonwebtoken");
 const jwtSecret = require("../config");
 const multer = require("multer");
-const upload = multer({ dest: './../public/img/uploads' });
+const upload = multer({ dest: __dirname + './../public/img/uploads' });
 const fs = require("fs");
 const path = require("path");
 
@@ -45,6 +45,7 @@ router.post("/create", upload.single("image"), (req,res)=> {
                     res.status(200).send({ok: false, error: "There was an error with the image name."});
                 }
             });
+            fs.unlink(req.file.path);
         }
     });
     db.getConnection((err, connection) => {

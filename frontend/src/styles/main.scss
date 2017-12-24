@@ -95,6 +95,8 @@ hr {
     img {
         border-radius: 4px;
         @include shadow(0.1);
+        height: 120px;
+        width: 120px;
     }
     h5 {
         font-weight: 600;

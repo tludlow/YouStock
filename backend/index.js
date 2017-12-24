@@ -6,7 +6,8 @@ const mysql = require("mysql");
 
 const app = express();
 const port = 3001;
-   
+
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -29,9 +30,6 @@ const postRoutes = require("./routes/postRoutes");
 //Setup rest api
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
-
-//Public images
-app.use("/public", express.static(__dirname + "/public"));
 
 // 404 Error Handler
 const endpointError = {status: 404, error: "No Endpoint Found"}
