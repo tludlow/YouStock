@@ -170,7 +170,18 @@ hr {
     padding: 6px 12px;
     cursor: pointer;
 }
-
+.post-view {
+    img {
+        height: 250px;
+        width: 250px;
+        @include shadow(0.1);
+        border-radius: 4px;
+    }
+    .post-body {
+        font-size: 18px;
+        overflow-wrap: break-word;
+    }
+}
 
 
 

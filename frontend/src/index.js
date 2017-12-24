@@ -23,6 +23,7 @@ import Home from "./views/Home";
 import FourOFour from "./views/FourOFour";
 import UserAuth from "./views/UserAuth";
 import NewPost from "./views/NewPost";
+import PostView from "./views/PostView";
 
 /* Import our data store */
 import store, {history} from './store';
@@ -49,6 +50,7 @@ render(
         <IndexRoute component={Home} />
         <Route path="/user" component={UserAuth} />
         <Route path="/newpost" component={NewPost} onEnter={requireAuth()}/>
+        <Route path="/post/:id" component={PostView} onEnter={requireAuth()}/>
       </Route>
       <Route path="/*" component={FourOFour} />
     </Router>

@@ -72,6 +72,22 @@ router.get("/frontpage", (req, res)=> {
     });
 });
 
+router.get("/:id", (req, res)=> {
+    const wantedPost = req.params.id;
+    db.getConnection((err, connection)=> {
+        connection.query("SELECT * FROM posts WHERE post_id = ? AND removed = 0", [wantedPost], (err, results, fields)=> {
+            if (err) throw err;
+            if(results.length == 0) {
+                res.status(200).send({ok: false, error: "There was no post found with that id."});
+                return;
+            } else {
+                res.status(200).send({ok: true, post: results[0]});
+            }
+        });
+        connection.release();
+    });
+});
+
 
 
 
