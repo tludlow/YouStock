@@ -22,6 +22,7 @@ import App from './components/App';
 import Home from "./views/Home";
 import FourOFour from "./views/FourOFour";
 import UserAuth from "./views/UserAuth";
+import NewPost from "./views/NewPost";
 
 /* Import our data store */
 import store, {history} from './store';
@@ -47,6 +48,7 @@ render(
       <Route path="/" component={App}>
         <IndexRoute component={Home} />
         <Route path="/user" component={UserAuth} />
+        <Route path="/newpost" component={NewPost} onEnter={requireAuth()}/>
       </Route>
       <Route path="/*" component={FourOFour} />
     </Router>

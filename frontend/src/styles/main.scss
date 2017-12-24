@@ -28,7 +28,12 @@ input[type=text], input[type=email], input[type=password], input[type=date], sel
     color: black;
     font-weight: 600;
 }
-
+input[type=file] {
+    display: none;
+}
+hr {
+    border-top-color: rgb(131, 131, 131) !important;
+}
 .navbar {
     background-color: rgb(28, 28, 29);
     color: white;
@@ -80,6 +85,7 @@ input[type=text], input[type=email], input[type=password], input[type=date], sel
 .post {
     text-align: center;
     margin-bottom: 60px;
+    margin-top: 20px;
     transition: ease-in-out .5s;
     &:hover {
         cursor: pointer;
@@ -114,7 +120,7 @@ input[type=text], input[type=email], input[type=password], input[type=date], sel
     cursor: pointer;
 }
 
-.signUpForm, .loginForm {
+.signUpForm, .loginForm, .postForm {
     fieldset {
         p {
           color: black;
@@ -148,7 +154,20 @@ input[type=text], input[type=email], input[type=password], input[type=date], sel
     margin-left: 20px;
     font-size: 19px;
 }
-
+.description-length {
+    color: rgb(238, 74, 74);
+}
+.submit {
+    font-weight: 600;
+    font-size: 16px;
+}
+.custom-file-upload {
+    border: 1px solid rgb(129, 129, 129);
+    border-radius: 4px;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
 
 
 
