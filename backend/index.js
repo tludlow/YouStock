@@ -34,7 +34,7 @@ app.use("/post", postRoutes);
 // 404 Error Handler
 const endpointError = {status: 404, error: "No Endpoint Found"}
 app.use((req, res) => {
-    res.send(404, endpointError);
+    res.status(404).send(endpointError);
 });
 
 var server = http.createServer(app);
