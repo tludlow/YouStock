@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../actions/actionCreators';
+import axios from "axios";
 
 class PostForm extends Component {
 
@@ -27,10 +28,35 @@ class PostForm extends Component {
         e.preventDefault();
         var title = this.refs.postFormTitle.value;
         var description = this.refs.postFormDescription.value;
-        var file = this.refs.postFormFile;
+        var file = this.state.file;
         var cost = this.refs.postFormCost.value;
+        
+        if(!file) {
+            this.setState({errors: "Please provide a picture for your post."});
+            return;
+        }
+        if(((file.size/1024)/1024).toFixed(4) > 1.5) { //If file is greater than 1.5 MB
+            this.setState({errors: "Your file is too large, please dont upload a file larger than 1.5 MB"});
+            return;
+        }
 
-        console.log(this.state.file);
+        var formData = new FormData();
+        formData.append("title", title);
+        formData.append("body", description);
+        formData.append("image", this.state.file);
+        formData.append("token", this.props.user.token);
+        formData.append("posted_by", this.props.user.username);
+        formData.append("cost", cost);
+        const config = {
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        };
+        axios.post("http://localhost:3001/post/create", formData, config).then((response)=> {
+            console.log(response);
+        }).catch((error)=> {
+            console.log(error);
+        });
     }
 
     handleFileUpload(e) {
@@ -53,6 +79,7 @@ class PostForm extends Component {
 
                     <fieldset>
                         <p>Picture</p>
+                        {this.state.file ? <p>{this.state.file.name}</p> : ""}
                         <label htmlFor="postFormFileInput" className="custom-file-upload">
                             Upload File
                         </label>

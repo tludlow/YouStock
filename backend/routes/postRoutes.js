@@ -3,6 +3,10 @@ const router = express.Router();
 const db = require("../database");
 const jwt = require("jsonwebtoken");
 const jwtSecret = require("../config");
+const multer = require("multer");
+const upload = multer({ dest: './../public/img/uploads' });
+const fs = require("fs");
+const path = require("path");
 
 var jwtAuthenticator = async (req, res, next)=> {
     const auth = req.get("authorization");
@@ -20,19 +24,34 @@ var jwtAuthenticator = async (req, res, next)=> {
     }
 };
 
-router.post("/create", jwtAuthenticator, (req,res)=> {
-    const { title, body, image, posted_by } = req.body;
+router.post("/create", upload.single("image"), (req,res)=> {
+    const { title, body, posted_by, token, cost } = req.body;
+    var newFileName = `${new Date().getTime()}-${req.file.originalname}`
     const toInsert = {
         title,
         body,
-        image,
-        posted_by
+        image: newFileName,
+        posted_by,
+        cost
     };
+    fs.readFile(req.file.path, function (err, data) {
+        var imageName = req.file.originalname;
+        if(!imageName){
+            res.status(200).send({ok: false, error: "There was an error with the image name."});
+        } else {
+            var newPath = path.join(__dirname + "./../public/img/uploads/" + newFileName);
+            fs.writeFile(newPath, data, function (err) {
+                if(err) {
+                    res.status(200).send({ok: false, error: "There was an error with the image name."});
+                }
+            });
+        }
+    });
     db.getConnection((err, connection) => {
         if (err) throw err;
         db.query("INSERT INTO posts SET ?", toInsert, (err, results, fields)=> {
             if (err) throw err;
-            res.status(200).send({ok: true, title, body, posted_by, image});
+            res.status(200).send({ok: true});
         });
         connection.release();
     });
