@@ -28,6 +28,7 @@ const initialState = {
         errors: "",
         username: "",
         token: "",
+        rank: "",
     }
 };
 
@@ -64,6 +65,7 @@ store.subscribe(throttle(() => {
       errors: "",
       username: state.user.username,
       token: state.user.token,
+      rank: state.user.rank,
     }
   };
   // var userAssigner = "";

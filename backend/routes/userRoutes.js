@@ -63,9 +63,9 @@ router.post("/signup", (req, res)=> {
             } else {
                 connection.query("INSERT INTO users SET ?", toInsert, (err, results, fields)=> {
                     if (err) throw err;
-                    let dataJWT = {username, email, iat: Math.floor(Date.now() / 1000) - 30};
+                    let dataJWT = {username, email, rank: "user", iat: Math.floor(Date.now() / 1000) - 30};
                     const token = jwt.sign(dataJWT, config.jwtSecret);
-                    res.status(200).send({ok: true, username, email, token});
+                    res.status(200).send({ok: true, username, email, token, rank: "user"});
                 });
             }
         });
@@ -84,7 +84,8 @@ router.post("/login", (req, res)=> {
                     username: results[0].username,
                     email: results[0].email,
                     passwordHash: results[0].password,
-                    banned: results[0].banned
+                    banned: results[0].banned,
+                    rank: results[0].rank
                 };
                 if(returned.banned == 1) {
                     connection.query("SELECT reason, unban_date FROM bans WHERE username = ?", [username], (err, results, fields)=> {
@@ -94,9 +95,9 @@ router.post("/login", (req, res)=> {
                 } else {
                     if(validPassword(password, returned.passwordHash)) {
                         //login
-                        let dataJWT = {username: returned.username, email: returned.email, iat: Math.floor(Date.now() / 1000) - 30};
+                        let dataJWT = {username: returned.username, email: returned.email, rank: returned.rank, iat: Math.floor(Date.now() / 1000) - 30};
                         const token = jwt.sign(dataJWT, config.jwtSecret);
-                        res.status(200).send({ok: true, username, token});
+                        res.status(200).send({ok: true, username, token, rank: returned.rank});
                     } else {
                         //warn error
                         res.status(200).send({ok: false, error: "Incorrect login details have been provided"});
