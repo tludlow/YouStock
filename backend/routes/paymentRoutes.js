@@ -33,11 +33,14 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
             throw err;  
             return;    
         }
-        connection.query("SELECT cost FROM posts WHERE post_id = ?", [post_id], (err, results, fields)=> {
+        connection.query("SELECT cost, sold FROM posts WHERE post_id = ?", [post_id], (err, results, fields)=> {
             if(err) {
                 res.status(200).send({ok: false, error: "There was an error, please try again. stage 2"});
                 throw err;  
                 return;   
+            }
+            if(results[0].sold == 1) {
+                res.status(200).send({ok: false, error: "Somebody already purchased this item, unlucky."});
             }
             cost = Math.ceil((results[0].cost) * 100);
             console.log(cost);

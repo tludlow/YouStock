@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import {browserHistory} from "react-router";
+import {browserHistory, Link} from "react-router";
 
 import Navbar from "../components/Navbar/Navbar";
 import Frontpage from "../components/Frontpage/Frontpage";
@@ -74,6 +74,7 @@ export default class Home extends Component {
 					<Navbar />
 					<div className="container">
 						<h3 className="home-title">The most recent posts on the site curated just for you.</h3>
+						<h5><Link to="/newpost">Create your own post</Link></h5>
 						<div className="row post-row">
 							{this.state.data.map((post, i)=> (
 								<div className="col-xs-3" key={i}>
@@ -89,7 +90,7 @@ export default class Home extends Component {
 							))}
 						</div>
 						{this.state.pageError.length > 0 ? <p className="error">{this.state.pageError}</p> : "" }
-						<button onClick={()=> this.getNextRows(this.state.page + 1)}>Load More - TODO PAGINATION, CONTINUOUS SCROLLING</button>
+						<button onClick={()=> this.getNextRows(this.state.page + 1)}>Load More</button>
 					</div>
 				</div>
 			);
@@ -100,7 +101,7 @@ export default class Home extends Component {
 					<div className="container">
 						<h3 className="home-title">The most recent posts on the site curated just for you.</h3>
 						<div className="row post-row">
-							<h3>There are no created posts.</h3>
+							<h3>There are no created posts. <Link to="/newpost">Why dont you create one?</Link></h3>
 						</div>
 					</div>
 				</div>
