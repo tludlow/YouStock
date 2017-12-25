@@ -238,7 +238,7 @@ form {
     border-bottom: 3px solid #e6ebf1;
 }
 
-.stripe-submit {
+.stripe-submit, button {
     white-space: nowrap;
     border: 0;
     outline: 0;
@@ -253,7 +253,8 @@ form {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.025em;
-    background-color: #6772e5;
+    //background-color: #6772e5;
+    background-color: rgb(54, 173, 54);
     text-decoration: none;
     -webkit-transition: all 150ms ease;
     transition: all 150ms ease;
