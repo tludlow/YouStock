@@ -3,7 +3,7 @@ import axios from "axios";
 import moment from "moment";
 
 import Navbar from "../components/Navbar/Navbar";
-import Payment from "../components/Post/Payment"
+import Checkout from "../components/Post/Checkout";
 
 export default class PostView extends Component {
 
@@ -65,7 +65,7 @@ export default class PostView extends Component {
                 </div>
             );
         }
-        if(this.state.commentCount == 0) {
+        if(this.state.commentCount === 0) {
             return (
                 <div className="post-view">
                     <Navbar />
@@ -80,7 +80,7 @@ export default class PostView extends Component {
                                 <hr/>
                                 <p className="post-body">{this.state.post.body}</p>
                                 <hr/>
-                                <Payment cost={this.state.post.cost} title={this.state.post.title}/>
+                                <Checkout title={this.state.post.title} cost={this.state.post.cost} />
                             </div>
                         </div>
                         <br/>
@@ -104,12 +104,12 @@ export default class PostView extends Component {
                             <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
                         </div>
                         <div className="col-xs-6">
-                            <h3 className="title">{this.state.post.title} <span><small>- {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
+                            <h3 className="title">{this.state.post.title} <span><small>- Posted {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
                             <h5>£{this.state.post.cost}</h5>
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
-                            <Payment cost={this.state.post.cost} title={this.state.post.title}/>
+                            <Checkout title={this.state.post.title} cost={this.state.post.cost} />
                         </div>
                     </div>
                     <br/>
@@ -119,7 +119,7 @@ export default class PostView extends Component {
                             <br/>
                             {this.state.comments.map((comment, i)=> (
                                 <div className="comment" key={i}>
-                                    <h4 className="title">{comment.posted_by} <span><small>- {moment(comment.posted_at).fromNow()}</small></span></h4>
+                                    <h4 className="title">{comment.posted_by} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
                                     <p>{comment.text}</p>
                                 </div>
                             ))}

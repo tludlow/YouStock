@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../database");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
+const stripe = require("stripe")(config.stripeSecret);
 
 var jwtAuthenticator = async (req, res, next)=> {
     const auth = req.get("authorization");
@@ -20,8 +21,17 @@ var jwtAuthenticator = async (req, res, next)=> {
 };
 
 router.post("/charge", (req, res)=> {
-    console.log(config.stripeSecret);
-    //const token = res.body.stripeToken;
+    const token = req.body.stripeToken;
+    console.log("In here");
+    // stripe.charges.create({
+    //     amount: 1000,
+    //     currency: "gbp",
+    //     description: "Example charge",
+    //     source: token,
+    // }, function(err, charge) {
+    //     if(err) throw err;
+    //     res.status(200).send({ok: true, messgae: "payment complete"});
+    // });
 });
 
 
