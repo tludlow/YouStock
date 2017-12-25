@@ -70,6 +70,7 @@ export default class Home extends Component {
 								</div>	
 							))}
 						</div>
+						<button>Load More - TODO PAGINATION, CONTINUOUS SCROLLING</button>
 					</div>
 				</div>
 			);

@@ -3,6 +3,7 @@ import axios from "axios";
 import moment from "moment";
 
 import Navbar from "../components/Navbar/Navbar";
+import Payment from "../components/Post/Payment"
 
 export default class PostView extends Component {
 
@@ -78,6 +79,8 @@ export default class PostView extends Component {
                                 <h5>£{this.state.post.cost}</h5>
                                 <hr/>
                                 <p className="post-body">{this.state.post.body}</p>
+                                <hr/>
+                                <Payment cost={this.state.post.cost} title={this.state.post.title}/>
                             </div>
                         </div>
                         <br/>
@@ -101,10 +104,12 @@ export default class PostView extends Component {
                             <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
                         </div>
                         <div className="col-xs-6">
-                            <h3 className="title">{this.state.post.title}</h3>
+                            <h3 className="title">{this.state.post.title} <span><small>- {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
                             <h5>£{this.state.post.cost}</h5>
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
+                            <hr/>
+                            <Payment cost={this.state.post.cost} title={this.state.post.title}/>
                         </div>
                     </div>
                     <br/>
@@ -118,6 +123,7 @@ export default class PostView extends Component {
                                     <p>{comment.text}</p>
                                 </div>
                             ))}
+                            <button>Load More - TODO PAGINATION, CONTINUOUS SCROLLING</button>
                         </div>
                     </div>
                 </div>

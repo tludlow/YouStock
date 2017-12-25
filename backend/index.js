@@ -26,10 +26,12 @@ app.disable('view cache');
 //File imports
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 //Setup rest api
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
+app.use("/payment", paymentRoutes);
 
 // 404 Error Handler
 const endpointError = {status: 404, error: "No Endpoint Found"}
