@@ -21,5 +21,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/backend/config.js*
+/backend/config/*
 /backend/public/img/uploads/*
