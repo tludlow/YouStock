@@ -41,6 +41,7 @@ class _CardForm extends Component {
         <form onSubmit={(e)=> this.onSubmit(e)}>
           <CardElement />
           {this.state.errors.length > 0 ? <p className="error">{this.state.errors}</p> : "" }
+          {this.state.message.length > 0 ? <p>{this.state.message}</p> : "" }
           <input type="submit" disabled={this.state.loading} className="submit stripe-submit" value={this.state.loading ? "Loading..." : "Submit Payment (£" + this.props.cost + ")"} />
         </form>
       );

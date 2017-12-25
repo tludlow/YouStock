@@ -23,15 +23,21 @@ var jwtAuthenticator = async (req, res, next)=> {
 router.post("/charge", (req, res)=> {
     const token = req.body.stripeToken;
     console.log("In here");
-    // stripe.charges.create({
-    //     amount: 1000,
-    //     currency: "gbp",
-    //     description: "Example charge",
-    //     source: token,
-    // }, function(err, charge) {
-    //     if(err) throw err;
-    //     res.status(200).send({ok: true, messgae: "payment complete"});
-    // });
+    stripe.charges.create({
+        amount: 1000,
+        currency: "gbp",
+        description: "Example charge",
+        source: token,
+    }, function(err, charge) {
+        if(err) {
+            res.status(200).send({ok: false, error: err});
+            return;
+        } else {
+            res.status(200).send({ok: true, message: "payment complete"});
+            return;
+        }
+        
+    });
 });
 
 
