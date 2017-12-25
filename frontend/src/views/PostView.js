@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import moment from "moment";
 
 import Navbar from "../components/Navbar/Navbar";
 
@@ -10,14 +11,16 @@ export default class PostView extends Component {
         this.state = {
             loading: true,
             error: false,
-            post: null
+            post: null,
+            comments: null,
+            commentCount: 0,
         };
     }
 
     componentDidMount() {
         axios.get("http://localhost:3001/post/" + this.props.params.id).then((response)=> {
             if(response.data.ok === true) {
-                this.setState({loading: false, post: response.data.post});
+                this.setState({loading: false, post: response.data.post, commentCount: response.data.commentCount, comments: response.data.comments});
                 return;
             }
             this.setState({loading: false, error: true});
@@ -61,6 +64,33 @@ export default class PostView extends Component {
                 </div>
             );
         }
+        if(this.state.commentCount == 0) {
+            return (
+                <div className="post-view">
+                    <Navbar />
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
+                            </div>
+                            <div className="col-xs-6">
+                                <h3 className="title">{this.state.post.title}</h3>
+                                <h5>£{this.state.post.cost}</h5>
+                                <hr/>
+                                <p className="post-body">{this.state.post.body}</p>
+                            </div>
+                        </div>
+                        <br/>
+                        <div className="row">
+                            <div className="col-xs-4">
+                                <h4 className="title">Comments</h4>
+                                <p>There are no comments on this post.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
         //No error has occured.
         return (
             <div className="post-view">
@@ -81,6 +111,13 @@ export default class PostView extends Component {
                     <div className="row">
                         <div className="col-xs-4">
                             <h4 className="title">Comments</h4>
+                            <br/>
+                            {this.state.comments.map((comment, i)=> (
+                                <div className="comment" key={i}>
+                                    <h4 className="title">{comment.posted_by} <span><small>- {moment(comment.posted_at).fromNow()}</small></span></h4>
+                                    <p>{comment.text}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

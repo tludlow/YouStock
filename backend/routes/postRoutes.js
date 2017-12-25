@@ -75,13 +75,25 @@ router.get("/frontpage", (req, res)=> {
 router.get("/:id", (req, res)=> {
     const wantedPost = req.params.id;
     db.getConnection((err, connection)=> {
-        connection.query("SELECT * FROM posts WHERE post_id = ? AND removed = 0", [wantedPost], (err, results, fields)=> {
+        connection.query("SELECT * FROM posts WHERE post_id = ?", [wantedPost], (err, results1, fields)=> {
             if (err) throw err;
-            if(results.length == 0) {
+            if(results1.length == 0) {
                 res.status(200).send({ok: false, error: "There was no post found with that id."});
                 return;
             } else {
-                res.status(200).send({ok: true, post: results[0]});
+                if(results1[0].removed == 1) {
+                    res.status(200).send({ok: false, error: "That post has been removed due to a moderation action."});
+                    return;
+                }
+                connection.query("SELECT * FROM comments WHERE post_id = ? LIMIT 5", [wantedPost], (err, results2, fields)=> {
+                    if(results2.length == 0) {
+                        res.status(200).send({ok: true, post: results1[0]});
+                        return;
+                    } else {
+                        res.status(200).send({ok: true, post: results1[0], commentCount: results2.length, comments: results2});
+                        return;
+                    }
+                });
             }
         });
         connection.release();
