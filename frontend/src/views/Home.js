@@ -10,15 +10,30 @@ export default class Home extends Component {
 		super();
 		this.state = {
 			loading: true,
-			data: {}
+			data: {},
+			page: 1,
+			pageError: "",
 		};
 	}
 
 	componentDidMount() {
-		axios.get("http://localhost:3001/post/frontpage").then((response)=> {
+		axios.get("http://localhost:3001/post/frontpage/1").then((response)=> {
 			this.setState({loading: false, data: response.data.results});
 		}).catch((err)=> {
 			console.log(err);
+		});
+	}
+
+	getNextRows(pageNumber) {
+		axios.get("http://localhost:3001/post/frontpage/" + pageNumber).then((response)=> {
+			if(response.data.ok === true) {
+				this.setState({page: pageNumber, data: [...this.state.data, ...response.data.results]});
+				return;
+			} else {
+				this.setState({pageError: response.data.error});
+			}
+		}).catch((err)=> {
+			this.setState({pageError: err});
 		});
 	}
 
@@ -73,7 +88,8 @@ export default class Home extends Component {
 								</div>	
 							))}
 						</div>
-						<button>Load More - TODO PAGINATION, CONTINUOUS SCROLLING</button>
+						{this.state.pageError.length > 0 ? <p className="error">{this.state.pageError}</p> : "" }
+						<button onClick={()=> this.getNextRows(this.state.page + 1)}>Load More - TODO PAGINATION, CONTINUOUS SCROLLING</button>
 					</div>
 				</div>
 			);

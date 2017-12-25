@@ -41,7 +41,7 @@ class PostForm extends Component {
             this.setState({errors: "Your file is too large, please dont upload a file larger than 1.5 MB"});
             return;
         }
-        var re = new RegExp("^([0-9]{0,2}((.)[0-9]{0,2}))$");
+        var re = new RegExp("^([0-9]{0,5}((.)[0-9]{0,2}))$");
         if(!re.test(cost)) {
             this.setState({errors: "The cost should be a number, it can also contain a period/fullstop."});
             return;
@@ -79,6 +79,7 @@ class PostForm extends Component {
     handleFileUpload(e) {
         this.setState({file: e[0]});
         var reader = new FileReader();
+        // eslint-disable-next-line
         var url = reader.readAsDataURL(e[0]);
         reader.onloadend = function (e) {
             this.setState({fileSrc: [reader.result]});
@@ -102,7 +103,7 @@ class PostForm extends Component {
                     <fieldset>
                         <p>Picture</p>
                         {this.state.file ? <p>{this.state.file.name}</p> : ""}
-                        {this.state.fileSrc.length > 0 ? <img className="preview-image" src={this.state.fileSrc} alt="picture uploaded" /> : ""}
+                        {this.state.fileSrc.length > 0 ? <img className="preview-image" src={this.state.fileSrc} alt={this.state.file.name} /> : ""}
                         <label htmlFor="postFormFileInput" className="custom-file-upload">
                             Upload File
                         </label>

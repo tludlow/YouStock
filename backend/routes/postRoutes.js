@@ -57,19 +57,37 @@ router.post("/create", jwtAuthenticator, upload.single("image"), (req,res)=> {
     });
 });
 
-router.get("/frontpage", (req, res)=> {
-    db.getConnection((err, connection)=> {
-        connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT 30", (err, results, fields)=> {
-            if (err) throw err;
-            if(results.length == 0) {
-                res.status(200).send({ok: false, error: "No posts exist!"});
-                return;
-            } else {
-                res.status(200).send({ok: true, results});
-            }
+router.get("/frontpage/:page", (req, res)=> {
+    const page = parseInt(req.params.page);
+    const limit = 20;
+    if(page == 1) {
+        db.getConnection((err, connection)=> {
+            connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT ?", [limit], (err, results, fields)=> {
+                if (err) throw err;
+                if(results.length == 0) {
+                    res.status(200).send({ok: false, error: "No posts exist!"});
+                    return;
+                } else {
+                    res.status(200).send({ok: true, results});
+                }
+            });
+            connection.release();
         });
-        connection.release();
-    });
+    } else {
+        db.getConnection((err, connection)=> {
+            var offsetPage = parseInt((page - 1) * limit);
+            connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT ? OFFSET ?", [limit, offsetPage], (err, results, fields)=> {
+                if (err) throw err;
+                if(results.length == 0) {
+                    res.status(200).send({ok: false, error: "There are no more posts in the database."});
+                    return;
+                } else {
+                    res.status(200).send({ok: true, results, page: page + 1});
+                }
+            });
+            connection.release();
+        });
+    }
 });
 
 router.get("/:id", (req, res)=> {
