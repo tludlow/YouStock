@@ -3,7 +3,6 @@ import axios from "axios";
 import {browserHistory, Link} from "react-router";
 
 import Navbar from "../components/Navbar/Navbar";
-import Frontpage from "../components/Frontpage/Frontpage";
 export default class Home extends Component {
 
 	constructor(props) {
@@ -42,11 +41,6 @@ export default class Home extends Component {
 	}
 
 	render() {
-		if(!this.props.user.loggedIn) {
-			return (
-				<Frontpage />
-			);
-		}
 		if(this.state.loading) {
 			return (
 				<div className="homepage">

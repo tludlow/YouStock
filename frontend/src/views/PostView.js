@@ -30,6 +30,40 @@ export default class PostView extends Component {
         });
     }
 
+    checkPurchase() {
+        if(!this.props.user.loggedIn) {
+            return <p className="error">You must be logged in to purchase items.</p>
+        }
+        if(this.state.post.sold) {
+            return <p className="error">You can't purchase already sold items.</p>
+        }
+        return <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} />
+    }
+
+    commentHandler(){
+        if(this.state.commentCount === 0) {
+            return <div className="row">
+                        <div className="col-xs-4">
+                            <h4 className="title">Comments</h4>
+                            <p>There are no comments on this post.</p>
+                        </div>
+                    </div>
+        } else {
+            return <div className="row">
+                        <div className="col-xs-4">
+                            <h4 className="title">Comments</h4>
+                            <br/>
+                            {this.state.comments.map((comment, i)=> (
+                                <div className="comment" key={i}>
+                                    <h4 className="title">{comment.posted_by} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
+                                    <p>{comment.text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+        }
+    }
+
     render() {
         if(this.state.loading) {
             return(
@@ -65,39 +99,7 @@ export default class PostView extends Component {
                 </div>
             );
         }
-        if(this.state.commentCount === 0) {
-            return (
-                <div className="post-view">
-                    <Navbar />
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-xs-6">
-                                <div className="img-holder">
-                                    <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
-                                    {this.state.post.sold ? <div className="centered">SOLD</div> : ""}
-                                </div>
-                            </div>
-                            <div className="col-xs-6">
-                                <h3 className="title">{this.state.post.title}</h3>
-                                <h5>£{this.state.post.cost}</h5>
-                                <hr/>
-                                <p className="post-body">{this.state.post.body}</p>
-                                <hr/>
-                                {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} /> : <p className="error">You cannot purchase an item that has already been sold.</p>}
-                            </div>
-                        </div>
-                        <br/>
-                        <div className="row">
-                            <div className="col-xs-4">
-                                <h4 className="title">Comments</h4>
-                                <p>There are no comments on this post.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        //No error has occured.
+        
         return (
             <div className="post-view">
                 <Navbar />
@@ -111,28 +113,16 @@ export default class PostView extends Component {
                         </div>
                         <div className="col-xs-6">
                             <h3 className="title">{this.state.post.title} <span><small>- Posted {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
-                            <h5>£{this.state.post.cost}</h5>
+                            <h5>Posted by {this.state.post.posted_by} for £{this.state.post.cost}</h5>
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
-                            {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} /> : <p className="error">You cannot purchase an item that has already been sold.</p>}
+                            {this.checkPurchase()}
                             
                         </div>
                     </div>
                     <br/>
-                    <div className="row">
-                        <div className="col-xs-4">
-                            <h4 className="title">Comments</h4>
-                            <br/>
-                            {this.state.comments.map((comment, i)=> (
-                                <div className="comment" key={i}>
-                                    <h4 className="title">{comment.posted_by} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
-                                    <p>{comment.text}</p>
-                                </div>
-                            ))}
-                            <button>Load More - TODO PAGINATION, CONTINUOUS SCROLLING</button>
-                        </div>
-                    </div>
+                    {this.commentHandler()}
                 </div>
             </div>
         );

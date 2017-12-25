@@ -95,7 +95,6 @@ hr {
     }
     img {
         border-radius: 4px;
-        @include shadow(0.1);
         height: 120px;
         width: 120px;
     }
@@ -175,7 +174,6 @@ hr {
     img {
         height: 500px;
         width: 500px;
-        @include shadow(0.1);
         border-radius: 4px;
     }
     .post-body {

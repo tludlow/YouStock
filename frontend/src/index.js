@@ -49,8 +49,8 @@ render(
       <Route path="/" component={App}>
         <IndexRoute component={Home} />
         <Route path="/user" component={UserAuth} />
-        <Route path="/newpost" component={NewPost} onEnter={requireAuth()}/>
-        <Route path="/post/:id" component={PostView} onEnter={requireAuth()}/>
+        <Route path="/newpost" component={NewPost} />
+        <Route path="/post/:id" component={PostView} />
       </Route>
       <Route path="/*" component={FourOFour} />
     </Router>
