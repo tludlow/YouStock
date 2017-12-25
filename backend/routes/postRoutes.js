@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database");
 const jwt = require("jsonwebtoken");
-const jwtSecret = require("../config");
+const config = require("../config/config");
 const multer = require("multer");
 const upload = multer({ dest: __dirname + './../public/img/uploads' });
 const fs = require("fs");
@@ -16,7 +16,7 @@ var jwtAuthenticator = async (req, res, next)=> {
     }
     const token = auth.split(" ")[1]; //come in the form Bearer TOKENHERE, we only want the TOKENHERE bit.
     try {
-        var decodedToken = await jwt.verify(token, jwtSecret);
+        var decodedToken = await jwt.verify(token, config.jwtSecret);
         next();
     } catch (err) {
         res.status(200).send({ok: false, error: "Invalid auth token"});

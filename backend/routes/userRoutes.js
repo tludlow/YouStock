@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../database");
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require("jsonwebtoken");
-const jwtSecret = require("../config");
+const config = require("../config/config");
 
 
 var jwtAuthenticator = async (req, res, next)=> {
@@ -14,7 +14,7 @@ var jwtAuthenticator = async (req, res, next)=> {
     }
     const token = auth.split(" ")[1]; //come in the form Bearer TOKENHERE, we only want the TOKENHERE bit.
     try {
-        var decodedToken = await jwt.verify(token, jwtSecret);
+        var decodedToken = await jwt.verify(token, config.jwtSecret);
         next();
     } catch (err) {
         res.status(200).send({ok: false, error: "Invalid auth token"});
@@ -64,7 +64,7 @@ router.post("/signup", (req, res)=> {
                 connection.query("INSERT INTO users SET ?", toInsert, (err, results, fields)=> {
                     if (err) throw err;
                     let dataJWT = {username, email, iat: Math.floor(Date.now() / 1000) - 30};
-                    const token = jwt.sign(dataJWT, jwtSecret);
+                    const token = jwt.sign(dataJWT, config.jwtSecret);
                     res.status(200).send({ok: true, username, email, token});
                 });
             }
@@ -95,7 +95,7 @@ router.post("/login", (req, res)=> {
                     if(validPassword(password, returned.passwordHash)) {
                         //login
                         let dataJWT = {username: returned.username, email: returned.email, iat: Math.floor(Date.now() / 1000) - 30};
-                        const token = jwt.sign(dataJWT, jwtSecret);
+                        const token = jwt.sign(dataJWT, config.jwtSecret);
                         res.status(200).send({ok: true, username, token});
                     } else {
                         //warn error
