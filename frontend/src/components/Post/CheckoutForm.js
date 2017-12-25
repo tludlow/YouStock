@@ -32,6 +32,7 @@ class _CardForm extends Component {
         };
 
         axios.post("http://localhost:3001/payment/charge", {stripeToken: result.token.id, post_id: this.props.post_id, title: this.props.title}, config).then((response)=> {
+            console.log(response);
             if(response.data.ok === false) {
                 this.setState({loading: false, errors: response.data.error, message: ""});
             } else {
@@ -48,7 +49,7 @@ class _CardForm extends Component {
           <CardElement />
           {this.state.errors.length > 0 ? <p className="error">{this.state.errors}</p> : "" }
           {this.state.message.length > 0 ? <p className="approved">{this.state.message}</p> : "" }
-          <input type="submit" disabled={this.state.loading} className="submit stripe-submit" value={this.state.loading ? "Loading..." : "Submit Payment (£" + this.props.cost + ")"} />
+          <input type="submit" disabled={this.state.loading} className="submit stripe-submit" value={this.state.loading ? "Processing Payment..." : "Submit Payment (£" + this.props.cost + ")"} />
         </form>
       );
     }

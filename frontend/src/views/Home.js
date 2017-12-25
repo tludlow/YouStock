@@ -65,7 +65,7 @@ export default class Home extends Component {
 									<div className="post" key={i} onClick={()=> this.redirectToPost(post.post_id)}>
 										<div className="img-holder">
 											<img src={"http://localhost:3001/img/uploads/" + post.image} alt={post.title}/>
-											{post.sold ? <div class="centered-small">SOLD</div> : ""}
+											{post.sold ? <div className="centered-small">SOLD</div> : ""}
 										</div>
 										<h5>{post.title}</h5>
 										<p>£{post.cost}</p>

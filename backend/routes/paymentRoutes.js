@@ -24,42 +24,56 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
     const token = req.body.stripeToken;
     const post_id = req.body.post_id;
     const title = req.body.title;
+    var cost = 0;
 
-    stripe.charges.create({
-        amount: 1000,//TODO
-        currency: "gbp",
-        description: "Purchase of " + title + " through YouStock",
-        source: token,
-    }, function(err, charge) {
+    //get the cost of the item they want to buy from the database.
+    db.getConnection((err, connection)=> {
         if(err) {
-            res.status(200).send({ok: false, error: err});
-            return;
-        } else {
-            if(charge.status != "succeeded" || charge.paid == false) {
-                res.status(200).send({ok: false, error: "The payment was not successful."}); 
-            } else {
-                db.getConnection((err, connection)=> {
-                    if(err) {
-                        res.status(200).send({ok: false, error: "Please contact support with the code: " + charge.id});
-                        throw err;  
-                        return;    
-                    }
-                    connection.query("UPDATE posts SET sold = 1 WHERE post_id = ?", [post_id], (err, results, fields)=>{
-                        if(err) {
-                            res.status(200).send({ok: false, error: "Please contact support with the code: " + charge.id});
-                            throw err;  
-                            return;    
-                        } else {
-                            res.status(200).send({ok: true, message: "payment completed for " + charge.description});
-                            return;
-                        }
-                    });
-                    connection.release();
-                });    
-            }
+            res.status(200).send({ok: false, error: "There was an error, please try again. stage 1"});
+            throw err;  
+            return;    
         }
+        connection.query("SELECT cost FROM posts WHERE post_id = ?", [post_id], (err, results, fields)=> {
+            if(err) {
+                res.status(200).send({ok: false, error: "There was an error, please try again. stage 2"});
+                throw err;  
+                return;   
+            }
+            cost = Math.ceil((results[0].cost) * 100);
+            console.log(cost);
+            stripe.charges.create({
+                amount: cost,
+                currency: "gbp",
+                description: "Purchase of " + title + " through YouStock",
+                metadata: {id: post_id, title, purchaser_token: req.get("authorization") || req.get("Authorization")},
+                source: token,
+            }, function(err, charge) {
+                if(err) {
+                    res.status(200).send({ok: false, error: "An error occured, stage 3"});
+                    return;
+                } else {
+                    if(charge.status != "succeeded" || charge.paid == false) {
+                        res.status(200).send({ok: false, error: "The payment was not successful."}); 
+                    } else {
+                        connection.query("UPDATE posts SET sold = 1 WHERE post_id = ?", [post_id], (err, results, fields)=>{
+                            if(err) {
+                                res.status(200).send({ok: false, error: "An error occured, stage 4"});
+                                throw err;  
+                                return;    
+                            } else {
+                                res.status(200).send({ok: true, message: "payment completed for " + charge.description});
+                                return;
+                            }
+                        });
+                    }
+                }
+                
+            });
+            
+        });
         
-    });
+        connection.release();
+    });    
 });
 
 

@@ -74,7 +74,7 @@ export default class PostView extends Component {
                             <div className="col-xs-6">
                                 <div className="img-holder">
                                     <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
-                                    {this.state.post.sold ? <div class="centered">SOLD</div> : ""}
+                                    {this.state.post.sold ? <div className="centered">SOLD</div> : ""}
                                 </div>
                             </div>
                             <div className="col-xs-6">
@@ -83,7 +83,7 @@ export default class PostView extends Component {
                                 <hr/>
                                 <p className="post-body">{this.state.post.body}</p>
                                 <hr/>
-                                <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} />
+                                {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id}/> : <p className="error">You cannot purchase an item that has already been sold.</p>}
                             </div>
                         </div>
                         <br/>
@@ -106,7 +106,7 @@ export default class PostView extends Component {
                         <div className="col-xs-6">
                             <div className="img-holder">
                                 <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
-                                {this.state.post.sold ? <div class="centered">SOLD</div> : ""}
+                                {this.state.post.sold ? <div className="centered">SOLD</div> : ""}
                             </div>
                         </div>
                         <div className="col-xs-6">
@@ -115,7 +115,8 @@ export default class PostView extends Component {
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
-                            <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id}/>
+                            {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id}/> : <p className="error">You cannot purchase an item that has already been sold.</p>}
+                            
                         </div>
                     </div>
                     <br/>
