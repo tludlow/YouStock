@@ -72,7 +72,10 @@ export default class PostView extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-xs-6">
-                                <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
+                                <div className="img-holder">
+                                    <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
+                                    {this.state.post.sold ? <div class="centered">SOLD</div> : ""}
+                                </div>
                             </div>
                             <div className="col-xs-6">
                                 <h3 className="title">{this.state.post.title}</h3>
@@ -80,7 +83,7 @@ export default class PostView extends Component {
                                 <hr/>
                                 <p className="post-body">{this.state.post.body}</p>
                                 <hr/>
-                                <Checkout title={this.state.post.title} cost={this.state.post.cost} />
+                                <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} />
                             </div>
                         </div>
                         <br/>
@@ -101,7 +104,10 @@ export default class PostView extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-xs-6">
-                            <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
+                            <div className="img-holder">
+                                <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
+                                {this.state.post.sold ? <div class="centered">SOLD</div> : ""}
+                            </div>
                         </div>
                         <div className="col-xs-6">
                             <h3 className="title">{this.state.post.title} <span><small>- Posted {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
@@ -109,7 +115,7 @@ export default class PostView extends Component {
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
-                            <Checkout title={this.state.post.title} cost={this.state.post.cost} />
+                            <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id}/>
                         </div>
                     </div>
                     <br/>

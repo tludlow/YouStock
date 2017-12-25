@@ -9,7 +9,7 @@ export default class Checkout extends Component {
           <h4 className="title">Purchase {this.props.title} for £{this.props.cost}</h4>
           <p>Test card: 4000008260000000</p>
           <Elements>
-            <CheckoutForm title={this.props.title} cost={this.props.cost} />
+            <CheckoutForm title={this.props.title} cost={this.props.cost} post_id={this.props.post_id}/>
           </Elements>
         </div>
       )

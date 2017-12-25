@@ -6,7 +6,7 @@ const config = require("../config/config");
 const stripe = require("stripe")(config.stripeSecret);
 
 var jwtAuthenticator = async (req, res, next)=> {
-    const auth = req.get("authorization");
+    const auth = req.get("authorization") || req.get("Authorization");
     if(!auth || typeof auth === "undefined") {
         res.status(200).send({ok: false, error: "Invalid auth token"});
         return;
@@ -20,21 +20,43 @@ var jwtAuthenticator = async (req, res, next)=> {
     }
 };
 
-router.post("/charge", (req, res)=> {
+router.post("/charge", jwtAuthenticator, (req, res)=> {
     const token = req.body.stripeToken;
-    console.log("In here");
+    const post_id = req.body.post_id;
+    const title = req.body.title;
+
     stripe.charges.create({
-        amount: 1000,
+        amount: 1000,//TODO
         currency: "gbp",
-        description: "Example charge",
+        description: "Purchase of " + title + " through YouStock",
         source: token,
     }, function(err, charge) {
         if(err) {
             res.status(200).send({ok: false, error: err});
             return;
         } else {
-            res.status(200).send({ok: true, message: "payment complete"});
-            return;
+            if(charge.status != "succeeded" || charge.paid == false) {
+                res.status(200).send({ok: false, error: "The payment was not successful."}); 
+            } else {
+                db.getConnection((err, connection)=> {
+                    if(err) {
+                        res.status(200).send({ok: false, error: "Please contact support with the code: " + charge.id});
+                        throw err;  
+                        return;    
+                    }
+                    connection.query("UPDATE posts SET sold = 1 WHERE post_id = ?", [post_id], (err, results, fields)=>{
+                        if(err) {
+                            res.status(200).send({ok: false, error: "Please contact support with the code: " + charge.id});
+                            throw err;  
+                            return;    
+                        } else {
+                            res.status(200).send({ok: true, message: "payment completed for " + charge.description});
+                            return;
+                        }
+                    });
+                    connection.release();
+                });    
+            }
         }
         
     });

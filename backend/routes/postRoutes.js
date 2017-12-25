@@ -87,7 +87,7 @@ router.get("/:id", (req, res)=> {
                 }
                 connection.query("SELECT * FROM comments WHERE post_id = ? LIMIT 5", [wantedPost], (err, results2, fields)=> {
                     if(results2.length == 0) {
-                        res.status(200).send({ok: true, post: results1[0]});
+                        res.status(200).send({ok: true, commentCount: 0, post: results1[0]});
                         return;
                     } else {
                         res.status(200).send({ok: true, post: results1[0], commentCount: results2.length, comments: results2});

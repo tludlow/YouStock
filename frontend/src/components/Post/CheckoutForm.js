@@ -16,23 +16,29 @@ class _CardForm extends Component {
     onSubmit(event) {
         event.preventDefault();
 
-        this.setState({loading: true});
+        this.setState({loading: true, message: ""});
         this.props.stripe.createToken().then((response)=> {
             this.createCharge(response);
         }).catch((err)=> {
-            this.setState({loading: false, errors: err});
+            this.setState({loading: false, errors: err, message: ""});
         });
     }
 
     createCharge(result) {
-        axios.post("http://localhost:3001/payment/charge", {stripeToken: result.token.id}).then((response)=> {
+        const config = {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem("token")}`
+            }
+        };
+
+        axios.post("http://localhost:3001/payment/charge", {stripeToken: result.token.id, post_id: this.props.post_id, title: this.props.title}, config).then((response)=> {
             if(response.data.ok === false) {
-                this.setState({loading: false, errors: response.data.error});
+                this.setState({loading: false, errors: response.data.error, message: ""});
             } else {
                 this.setState({loading: false, message: response.data.message});
             }
         }).catch((err)=> {
-            this.setState({loading: false, errors: err});
+            this.setState({loading: false, errors: err, message: ""});
         });
     }
 
@@ -41,7 +47,7 @@ class _CardForm extends Component {
         <form onSubmit={(e)=> this.onSubmit(e)}>
           <CardElement />
           {this.state.errors.length > 0 ? <p className="error">{this.state.errors}</p> : "" }
-          {this.state.message.length > 0 ? <p>{this.state.message}</p> : "" }
+          {this.state.message.length > 0 ? <p className="approved">{this.state.message}</p> : "" }
           <input type="submit" disabled={this.state.loading} className="submit stripe-submit" value={this.state.loading ? "Loading..." : "Submit Payment (£" + this.props.cost + ")"} />
         </form>
       );
