@@ -24,6 +24,7 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
     const token = req.body.stripeToken;
     const post_id = req.body.post_id;
     const title = req.body.title;
+    const username = req.body.username;
     var cost = 0;
 
     //get the cost of the item they want to buy from the database.
@@ -41,6 +42,7 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
             }
             if(results[0].sold == 1) {
                 res.status(200).send({ok: false, error: "Somebody already purchased this item, unlucky."});
+                return;
             }
             cost = Math.ceil((results[0].cost) * 100);
             console.log(cost);
@@ -48,7 +50,7 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
                 amount: cost,
                 currency: "gbp",
                 description: "Purchase of " + title + " through YouStock",
-                metadata: {id: post_id, title, purchaser_token: req.get("authorization") || req.get("Authorization")},
+                metadata: {id: post_id, title, purchaser_token: req.get("authorization") || req.get("Authorization"), username},
                 source: token,
             }, function(err, charge) {
                 if(err) {
@@ -65,6 +67,11 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
                                 return;    
                             } else {
                                 res.status(200).send({ok: true, message: "payment completed for " + charge.description});
+                                let dataInsert = {post_id, username};
+                                connection.query("INSERT INTO sales SET ?", dataInsert, (err, results, fields)=> {
+                                    if(err) throw err;
+
+                                });
                                 return;
                             }
                         });
@@ -74,7 +81,6 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
             });
             
         });
-        
         connection.release();
     });    
 });

@@ -31,7 +31,7 @@ class _CardForm extends Component {
             }
         };
 
-        axios.post("http://localhost:3001/payment/charge", {stripeToken: result.token.id, post_id: this.props.post_id, title: this.props.title}, config).then((response)=> {
+        axios.post("http://localhost:3001/payment/charge", {stripeToken: result.token.id, post_id: this.props.post_id, title: this.props.title, username: this.props.username}, config).then((response)=> {
             console.log(response);
             if(response.data.ok === false) {
                 this.setState({loading: false, errors: response.data.error, message: ""});

@@ -83,7 +83,7 @@ export default class PostView extends Component {
                                 <hr/>
                                 <p className="post-body">{this.state.post.body}</p>
                                 <hr/>
-                                {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id}/> : <p className="error">You cannot purchase an item that has already been sold.</p>}
+                                {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} /> : <p className="error">You cannot purchase an item that has already been sold.</p>}
                             </div>
                         </div>
                         <br/>
@@ -115,7 +115,7 @@ export default class PostView extends Component {
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
-                            {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id}/> : <p className="error">You cannot purchase an item that has already been sold.</p>}
+                            {!this.state.post.sold ? <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} /> : <p className="error">You cannot purchase an item that has already been sold.</p>}
                             
                         </div>
                     </div>
