@@ -14,6 +14,7 @@ class PostForm extends Component {
             description: "",
             errors: "",
             file: null,
+            fileSrc: "",
         };
     }
 
@@ -40,7 +41,8 @@ class PostForm extends Component {
             this.setState({errors: "Your file is too large, please dont upload a file larger than 1.5 MB"});
             return;
         }
-        if(!/^[0-9.]$/.test(cost)) {
+        var re = new RegExp("^([0-9]{0,2}((.)[0-9]{0,2}))$");
+        if(!re.test(cost)) {
             this.setState({errors: "The cost should be a number, it can also contain a period/fullstop."});
             return;
         }
@@ -76,6 +78,11 @@ class PostForm extends Component {
 
     handleFileUpload(e) {
         this.setState({file: e[0]});
+        var reader = new FileReader();
+        var url = reader.readAsDataURL(e[0]);
+        reader.onloadend = function (e) {
+            this.setState({fileSrc: [reader.result]});
+        }.bind(this);
     }
 
     render(){
@@ -95,6 +102,7 @@ class PostForm extends Component {
                     <fieldset>
                         <p>Picture</p>
                         {this.state.file ? <p>{this.state.file.name}</p> : ""}
+                        {this.state.fileSrc.length > 0 ? <img className="preview-image" src={this.state.fileSrc} alt="picture uploaded" /> : ""}
                         <label htmlFor="postFormFileInput" className="custom-file-upload">
                             Upload File
                         </label>
@@ -102,7 +110,8 @@ class PostForm extends Component {
                     </fieldset>
 
                     <fieldset>
-                        <p>Cost</p>
+                        <p>Cost (£)</p>
+                        <small>Can only contain numbers and a fullstop/period. Example 12.99</small>
                         <input type="text" ref="postFormCost" required/>
                     </fieldset>
 

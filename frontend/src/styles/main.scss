@@ -64,14 +64,15 @@ hr {
     .navbar-nav>li>a {
         font-weight: 600;
         font-size: 1.9rem;
-        margin-top: 4px;
-        line-height: 0px;
+        padding-top: 14px;
+        line-height: 7px;
         color: white;
         margin-left: 20px;
         transition: ease-in-out .3s;
         &:hover {
-            color: darken(white, 20);
-            transition: ease-in-out .3s;
+            color: darken(white, 50);
+            background-color:  lighten(rgb(28, 28, 29), 20);
+            transition: ease-in-out .1s;
         }
     }
 }
@@ -149,12 +150,13 @@ hr {
 .logout-button {
     padding-left: 4px;
     margin-top: 12px;
+    cursor: pointer;
 }
 .nav-username {
     font-weight: 600;
-    margin-top: 5px;
+    margin-top: 4px;
     margin-left: 20px;
-    font-size: 19px;
+    font-size: 1.9rem;
 }
 .description-length {
     color: rgb(238, 74, 74);
@@ -181,6 +183,14 @@ hr {
         font-size: 18px;
         overflow-wrap: break-word;
     }
+}
+.preview-image {
+    height: 128px;
+    width: 170px;
+    display: block;
+    border-radius: 4px;
+    @include shadow(0.1);
+    margin-bottom: 20px;
 }
 
 
