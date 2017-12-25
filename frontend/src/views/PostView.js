@@ -62,18 +62,25 @@ export default class PostView extends Component {
             );
         }
         //No error has occured.
-        return(
+        return (
             <div className="post-view">
                 <Navbar />
                 <div className="container">
-                    <h3 className="title">{this.state.post.title}</h3>
-                    <h5>£{this.state.post.cost}</h5>
+                    <div className="row">
+                        <div className="col-xs-6">
+                            <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt={this.state.post.image} />
+                        </div>
+                        <div className="col-xs-6">
+                            <h3 className="title">{this.state.post.title}</h3>
+                            <h5>£{this.state.post.cost}</h5>
+                            <hr/>
+                            <p className="post-body">{this.state.post.body}</p>
+                        </div>
+                    </div>
+                    <br/>
                     <div className="row">
                         <div className="col-xs-4">
-                            <img src={"http://localhost:3001/img/uploads/" + this.state.post.image} alt="" srcset=""/>
-                        </div>
-                        <div className="col-xs-4">
-                            <p className="post-body">{this.state.post.body}</p>
+                            <h4 className="title">Comments</h4>
                         </div>
                     </div>
                 </div>
