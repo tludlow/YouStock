@@ -103,7 +103,7 @@ router.get("/:id", (req, res)=> {
                     res.status(200).send({ok: false, error: "That post has been removed due to a moderation action."});
                     return;
                 }
-                connection.query("SELECT * FROM comments WHERE post_id = ? LIMIT 5", [wantedPost], (err, results2, fields)=> {
+                connection.query("SELECT * FROM comments WHERE post_id = ? ORDER BY posted_at ASC", [wantedPost], (err, results2, fields)=> {
                     if(results2.length == 0) {
                         res.status(200).send({ok: true, commentCount: 0, post: results1[0]});
                         return;
@@ -113,6 +113,20 @@ router.get("/:id", (req, res)=> {
                     }
                 });
             }
+        });
+        connection.release();
+    });
+});
+
+router.post("/createComment", (req, res)=> {
+    const { text, user, post } = req.body;
+    db.getConnection((err, connection)=> {
+        connection.query("INSERT INTO comments SET ?", data, (err, results, fields)=> {
+            if(err) {
+                res.status(200).send({ok: false, error: "There was an error creating a comment."});
+                return;
+            }
+            res.status(200).send({ok: true, comment: results});
         });
         connection.release();
     });
