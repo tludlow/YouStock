@@ -3,12 +3,28 @@ import {Link, browserHistory} from "react-router";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as actionCreators from '../../actions/actionCreators';
+import { DropdownButton, MenuItem } from "react-bootstrap";
 
 class Navbar extends Component {
 
 	logoutUser() {
 		this.props.logoutUser();
 		browserHistory.push("/");
+	}
+	navigateUser(path) {
+		browserHistory.push(path);
+	}
+
+	dropdown() {
+		if(this.props.user.loggedIn) {
+			return <DropdownButton title={this.props.user.username} className="user-dropdown">
+						<MenuItem onClick={()=> this.navigateUser("/profile/" + this.props.user.username)}>Profile</MenuItem>
+						<MenuItem divider />
+						<MenuItem onClick={()=> this.logoutUser()}>Logout</MenuItem>
+					</DropdownButton>
+		}
+		//{this.props.user.loggedIn ? <li className="nav-username">{this.props.user.username} </li> : ""}
+		//{this.props.user.loggedIn ? <li onClick={()=> this.logoutUser()}><i className="fa fa-arrow-down logout-button"></i></li> : ""}
 	}
 	render() {
 
@@ -34,8 +50,7 @@ class Navbar extends Component {
 								<li className="hidden"><a href="#page-top">Page Top</a></li>
 								<li><Link to="/">Home</Link></li>
 								{this.props.user.loggedIn === false ? <li><Link to="/user">Login / Signup</Link></li> : ""}
-								{this.props.user.loggedIn ? <li className="nav-username">{this.props.user.username} </li> : ""}
-								{this.props.user.loggedIn ? <li onClick={()=> this.logoutUser()}><i className="fa fa-arrow-down logout-button"></i></li> : ""}
+								{this.dropdown()}
 							</ul>
 						</div>
 					</div>
