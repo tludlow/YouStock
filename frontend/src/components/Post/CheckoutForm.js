@@ -50,24 +50,26 @@ class _CardForm extends Component {
       return (
         <form onSubmit={(e)=> this.onSubmit(e)}>
           <CardElement />
+          <div className="checkout-form">
             <div className="form-group">
-                <label>
-                    <span>Name</span>
-                    <input id="name" name="name" className="field" ref="checkoutName" placeholder="Jane Doe" required />
-                </label>
-            </div>
-            <div className="form-group">
-                <label>
-                    <span>Address</span>
-                    <input id="address" name="address" className="field" ref="checkoutAddress" placeholder="12 Winchester Road" required/>
-                </label>
-            </div>
-            <div className="form-group">
-                <label>
-                    <span>Postcode</span>
-                    <input id="postcode" name="postcode" className="field" ref="checkoutPostcode" placeholder="" required/>
-                </label>
-            </div>
+                    <label>
+                        <span>Name</span>
+                        <input id="name" name="name" className="field" ref="checkoutName" placeholder="Jane Doe" required />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label>
+                        <span>Address</span>
+                        <input id="address" name="address" className="field" ref="checkoutAddress" placeholder="12 Winchester Road" required/>
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label>
+                        <span>Postcode</span>
+                        <input id="postcode" name="postcode" className="field" ref="checkoutPostcode" placeholder="RE5 HD5" required/>
+                    </label>
+                </div>
+          </div>
           {this.state.errors.length > 0 ? <p className="error">{this.state.errors}</p> : "" }
           {this.state.message.length > 0 ? <p className="approved">{this.state.message}</p> : "" }
           <input type="submit" disabled={this.state.loading} className="submit stripe-submit" value={this.state.loading ? "Processing Payment..." : "Submit Payment (£" + this.props.cost + ")"} />

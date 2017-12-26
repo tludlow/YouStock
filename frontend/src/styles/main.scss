@@ -439,51 +439,54 @@ form {
     font-weight: bold;
     font-size: 20px;
 }
-.form-group {
-    background: white;
-    box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
-    border-radius: 4px;
-    margin-bottom: 20px;
-    margin-right: 45px;
-}
-label {
-    position: relative;
-    color: #8898AA;
-    font-weight: 300;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: row;
-}
-.form-group label:not(:last-child) {
-    border-bottom: 1px solid #F0F5FA;
-}
-label > span {
-    width: 80px;
-    margin-right: 20px;
-    color: rgb(49, 49, 49);
+.checkout-form, .create-comment {
+    .form-group {
+        background: white;
+        box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+        margin-bottom: 20px;
+        margin-right: 45px;
+    }
+    label {
+        position: relative;
+        color: #8898AA;
+        font-weight: 300;
+        height: 40px;
+        line-height: 40px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: row;
+    }
+    .form-group label:not(:last-child) {
+        border-bottom: 1px solid #F0F5FA;
+    }
+    label > span {
+        width: 80px;
+        margin-right: 20px;
+        color: rgb(49, 49, 49);
+    }
+    
+    .field {
+        background: transparent;
+        font-weight: 300;
+        border: 0;
+        color: #31325F;
+        outline: none;
+        flex: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+        cursor: text;
+    }
+    
+    .field::-webkit-input-placeholder {
+        color: rgb(160, 160, 160);
+    }
+    
+    .field::-moz-placeholder {
+        color: rgb(160, 160, 160);
+    }
 }
 
-.field {
-    background: transparent;
-    font-weight: 300;
-    border: 0;
-    color: #31325F;
-    outline: none;
-    flex: 1;
-    padding-right: 10px;
-    padding-left: 10px;
-    cursor: text;
-}
-
-.field::-webkit-input-placeholder {
-    color: #CFD7E0;
-}
-
-.field::-moz-placeholder {
-    color: #CFD7E0;
-}
 
 //Dropdown button on navbar
 .user-dropdown {
@@ -505,6 +508,10 @@ label > span {
         float: none;
         margin-left: 20px !important;
     }
+}
+.poster {
+    color: lighten(black, 40);
+    font-size: 14px;
 }
 
 

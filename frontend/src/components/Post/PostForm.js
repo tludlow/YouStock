@@ -50,8 +50,10 @@ class PostForm extends Component {
             this.setState({errors: "Your description is too long. It should be a maximum of 400 characters long."});
             return;
         }
-
-
+        if(!file.type === "image/jpeg" || !file.type === "image/jpg" || !file.type === "image/png") {
+            this.setState({errors: "Your file is of the wrong picture format. Only .PNG and .JPG/.JPEG allowed."});
+            return;
+        }
         var formData = new FormData();
         formData.append("title", title);
         formData.append("body", description);

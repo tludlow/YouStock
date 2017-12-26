@@ -17,7 +17,7 @@ class Navbar extends Component {
 
 	dropdown() {
 		if(this.props.user.loggedIn) {
-			return <DropdownButton title={this.props.user.username} className="user-dropdown">
+			return <DropdownButton id="dropdown" title={this.props.user.username} className="user-dropdown">
 						<MenuItem onClick={()=> this.navigateUser("/profile/" + this.props.user.username)}>Profile</MenuItem>
 						<MenuItem divider />
 						<MenuItem onClick={()=> this.logoutUser()}>Logout</MenuItem>

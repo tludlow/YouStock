@@ -120,6 +120,7 @@ router.get("/:id", (req, res)=> {
 
 router.post("/createComment", (req, res)=> {
     const { text, user, post } = req.body;
+    let data = {post_id: post, text, posted_by: user};
     db.getConnection((err, connection)=> {
         connection.query("INSERT INTO comments SET ?", data, (err, results, fields)=> {
             if(err) {

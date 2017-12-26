@@ -29,14 +29,14 @@ import PostView from "./views/PostView";
 import store, {history} from './store';
 
 //Authentication and stuff
-function requireAuth() {
-  return(nextState, replace) => {
-    let currentState = store.getState();
-    if(!currentState.user.loggedIn) {
-      replace({ pathname: "/user" });
-    }
-  };
-}
+// function requireAuth() {
+//   return(nextState, replace) => {
+//     let currentState = store.getState();
+//     if(!currentState.user.loggedIn) {
+//       replace({ pathname: "/user" });
+//     }
+//   };
+// }
 
 /*
   Rendering

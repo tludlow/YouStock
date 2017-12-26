@@ -4,6 +4,7 @@ import moment from "moment";
 
 import Navbar from "../components/Navbar/Navbar";
 import Checkout from "../components/Post/Checkout";
+import CreateComment from "../components/Post/CreateComment";
 
 export default class PostView extends Component {
 
@@ -45,6 +46,7 @@ export default class PostView extends Component {
             return <div className="row">
                         <div className="col-xs-4">
                             <h4 className="title">Comments</h4>
+                            <CreateComment post_id={this.state.post.post_id} username={this.props.user.username} />
                             <p>There are no comments on this post.</p>
                         </div>
                     </div>
@@ -52,10 +54,10 @@ export default class PostView extends Component {
             return <div className="row">
                         <div className="col-xs-4">
                             <h4 className="title">Comments</h4>
-                            <br/>
+                            <CreateComment post_id={this.state.post.post_id} username={this.props.user.username} />
                             {this.state.comments.map((comment, i)=> (
                                 <div className="comment" key={i}>
-                                    <h4 className="title">{comment.posted_by} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
+                                    <h4 className="title">{comment.posted_by} {comment.posted_by === this.state.post.posted_by ? <span className="poster">Poster</span> : ""} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
                                     <p>{comment.text}</p>
                                 </div>
                             ))}
@@ -113,7 +115,7 @@ export default class PostView extends Component {
                         </div>
                         <div className="col-xs-6">
                             <h3 className="title">{this.state.post.title} <span><small>- Posted {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
-                            <h5>Posted by {this.state.post.posted_by} for £{this.state.post.cost}</h5>
+                            <h5>Created by {this.state.post.posted_by} for £{this.state.post.cost}</h5>
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
