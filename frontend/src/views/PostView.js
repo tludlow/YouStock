@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import moment from "moment";
+import {Link} from "react-router";
 
 import Navbar from "../components/Navbar/Navbar";
 import Checkout from "../components/Post/Checkout";
 import CreateComment from "../components/Post/CreateComment";
+import Loading from "../components/Loading/Loading";
 
 export default class PostView extends Component {
 
@@ -57,7 +59,7 @@ export default class PostView extends Component {
                             <CreateComment post_id={this.state.post.post_id} username={this.props.user.username} />
                             {this.state.comments.map((comment, i)=> (
                                 <div className="comment" key={i}>
-                                    <h4 className="title">{comment.posted_by} {comment.posted_by === this.state.post.posted_by ? <span className="poster">Poster</span> : ""} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
+                                    <h4 className="title"><Link to={"/profile/" + comment.posted_by}>{comment.posted_by}</Link> {comment.posted_by === this.state.post.posted_by ? <span className="poster">Poster</span> : ""} <span><small>- Posted {moment(comment.posted_at).fromNow()}</small></span></h4>
                                     <p>{comment.text}</p>
                                 </div>
                             ))}
@@ -72,20 +74,7 @@ export default class PostView extends Component {
                 <div className="post-view">
                     <Navbar />
                     <div className="container">
-                        <div className="sk-circle">
-							<div className="sk-circle1 sk-child"></div>
-							<div className="sk-circle2 sk-child"></div>
-							<div className="sk-circle3 sk-child"></div>
-							<div className="sk-circle4 sk-child"></div>
-							<div className="sk-circle5 sk-child"></div>
-							<div className="sk-circle6 sk-child"></div>
-							<div className="sk-circle7 sk-child"></div>
-							<div className="sk-circle8 sk-child"></div>
-							<div className="sk-circle9 sk-child"></div>
-							<div className="sk-circle10 sk-child"></div>
-							<div className="sk-circle11 sk-child"></div>
-							<div className="sk-circle12 sk-child"></div>
-						</div>
+                        <Loading />
                         <h3 className="loading">Loading post {this.props.params.id}</h3>
                     </div>
                 </div>
@@ -115,12 +104,11 @@ export default class PostView extends Component {
                         </div>
                         <div className="col-xs-6">
                             <h3 className="title">{this.state.post.title} <span><small>- Posted {moment(this.state.post.posted_at).fromNow()}</small></span></h3>
-                            <h5>Created by {this.state.post.posted_by} for £{this.state.post.cost}</h5>
+                            <h5>Created by <Link to={"/profile/" + this.state.post.posted_by}>{this.state.post.posted_by}</Link> for £{this.state.post.cost}</h5>
                             <hr/>
                             <p className="post-body">{this.state.post.body}</p>
                             <hr/>
                             {this.checkPurchase()}
-                            
                         </div>
                     </div>
                     <br/>

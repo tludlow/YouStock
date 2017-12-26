@@ -24,6 +24,7 @@ import FourOFour from "./views/FourOFour";
 import UserAuth from "./views/UserAuth";
 import NewPost from "./views/NewPost";
 import PostView from "./views/PostView";
+import ProfileView from "./views/ProfileView";
 
 /* Import our data store */
 import store, {history} from './store';
@@ -51,6 +52,7 @@ render(
         <Route path="/user" component={UserAuth} />
         <Route path="/newpost" component={NewPost} />
         <Route path="/post/:id" component={PostView} />
+        <Route path="/profile/:id" component={ProfileView} />
       </Route>
       <Route path="/*" component={FourOFour} />
     </Router>

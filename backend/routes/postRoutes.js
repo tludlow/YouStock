@@ -62,7 +62,7 @@ router.get("/frontpage/:page", (req, res)=> {
     const limit = 20;
     if(page == 1) {
         db.getConnection((err, connection)=> {
-            connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT ?", [limit], (err, results, fields)=> {
+            connection.query("SELECT * FROM posts WHERE removed = 0 AND sold = 0 ORDER BY posted_at DESC LIMIT ?", [limit], (err, results, fields)=> {
                 if (err) throw err;
                 if(results.length == 0) {
                     res.status(200).send({ok: false, error: "No posts exist!"});
@@ -76,7 +76,7 @@ router.get("/frontpage/:page", (req, res)=> {
     } else {
         db.getConnection((err, connection)=> {
             var offsetPage = parseInt((page - 1) * limit);
-            connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT ? OFFSET ?", [limit, offsetPage], (err, results, fields)=> {
+            connection.query("SELECT * FROM posts WHERE removed = 0 AND sold = 0 ORDER BY posted_at DESC LIMIT ? OFFSET ?", [limit, offsetPage], (err, results, fields)=> {
                 if (err) throw err;
                 if(results.length == 0) {
                     res.status(200).send({ok: false, error: "There are no more posts in the database."});
@@ -118,7 +118,7 @@ router.get("/:id", (req, res)=> {
     });
 });
 
-router.post("/createComment", (req, res)=> {
+router.post("/createComment", jwtAuthenticator, (req, res)=> {
     const { text, user, post } = req.body;
     let data = {post_id: post, text, posted_by: user};
     db.getConnection((err, connection)=> {

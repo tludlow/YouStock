@@ -5,7 +5,12 @@ export default class CreateComment extends Component {
 
     submitComment(e) {
         e.preventDefault();
-        axios.post("http://localhost:3001/post/createComment", {user: this.props.username, text: this.refs.createCommentText.value, post: this.props.post_id}).then((response)=> {
+        const config = {
+            headers: {
+                'Authorization': `Token ${localStorage.getItem("token")}`
+            }
+        };
+        axios.post("http://localhost:3001/post/createComment", {user: this.props.username, text: this.refs.createCommentText.value, post: this.props.post_id}, config).then((response)=> {
             window.location.reload();
         }).catch((err)=> {
 

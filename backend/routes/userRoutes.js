@@ -109,6 +109,20 @@ router.post("/login", (req, res)=> {
     });
 });
 
+router.get("/profile/:name", (req,res)=> {
+    const name = req.params.name;
+    db.getConnection((err, connection)=> {
+        connection.query("SELECT username, rank, created_at FROM users WHERE username = ?", [name], (err, results, fields)=> {
+            if(err) {
+                res.status(200).send({ok: false, error: "An error occured querying the data for your profile."});
+                return;
+            }
+            res.status(200).send({ok: true, profile: results[0]});
+        });
+        connection.release();
+    });
+});
+
 
 
 

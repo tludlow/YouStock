@@ -3,6 +3,8 @@ import axios from "axios";
 import {browserHistory, Link} from "react-router";
 
 import Navbar from "../components/Navbar/Navbar";
+import Loading from "../components/Loading/Loading";
+
 export default class Home extends Component {
 
 	constructor(props) {
@@ -45,20 +47,7 @@ export default class Home extends Component {
 			return (
 				<div className="homepage">
 					<Navbar />
-						<div className="sk-circle">
-							<div className="sk-circle1 sk-child"></div>
-							<div className="sk-circle2 sk-child"></div>
-							<div className="sk-circle3 sk-child"></div>
-							<div className="sk-circle4 sk-child"></div>
-							<div className="sk-circle5 sk-child"></div>
-							<div className="sk-circle6 sk-child"></div>
-							<div className="sk-circle7 sk-child"></div>
-							<div className="sk-circle8 sk-child"></div>
-							<div className="sk-circle9 sk-child"></div>
-							<div className="sk-circle10 sk-child"></div>
-							<div className="sk-circle11 sk-child"></div>
-							<div className="sk-circle12 sk-child"></div>
-						</div>
+						<Loading />
 					<h3 className="loading" >Loading data...</h3>
 				</div>
 			);
