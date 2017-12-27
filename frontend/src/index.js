@@ -25,11 +25,11 @@ import UserAuth from "./views/UserAuth";
 import NewPost from "./views/NewPost";
 import PostView from "./views/PostView";
 import ProfileView from "./views/ProfileView";
+import AdminView from "./views/AdminView";
 
 /* Import our data store */
 import store, {history} from './store';
 
-//Authentication and stuff
 // function requireAuth() {
 //   return(nextState, replace) => {
 //     let currentState = store.getState();
@@ -38,6 +38,15 @@ import store, {history} from './store';
 //     }
 //   };
 // }
+
+function requireAuthAdmin() {
+  return(nextState, replace) => {
+    let currentState = store.getState();
+    if(!currentState.user.loggedIn && !currentState.user.rank === "admin") {
+      replace({ pathname: "/" });
+    }
+  };
+}
 
 /*
   Rendering
@@ -53,6 +62,7 @@ render(
         <Route path="/newpost" component={NewPost} />
         <Route path="/post/:id" component={PostView} />
         <Route path="/profile/:id" component={ProfileView} />
+        <Route path="/admin" component={AdminView} onEnter={requireAuthAdmin()} />
       </Route>
       <Route path="/*" component={FourOFour} />
     </Router>

@@ -13,15 +13,19 @@ var jwtAuthenticatorAdmin = async (req, res, next)=> {
     const token = auth.split(" ")[1]; //come in the form Bearer TOKENHERE, we only want the TOKENHERE bit.
     try {
         var decodedToken = await jwt.verify(token, config.jwtSecret);
-        console.log(decodedToken);
-        next();
+        if(decodedToken.rank == "admin") {
+            next();
+        } else {
+            res.status(200).send({ok: false, error: "Invalid rank on your auth token"});
+            return;
+        }
     } catch (err) {
         res.status(200).send({ok: false, error: "Invalid auth token"});
     }
 };
 
-router.get("/adminCheck", (req, res)=> {
-    console.log("meow");
+router.get("/adminCheck", jwtAuthenticatorAdmin, (req, res)=> {
+    res.status(200).send({ok: true, hello: "hello"});
 });
 
 
