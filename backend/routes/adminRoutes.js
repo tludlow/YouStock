@@ -29,7 +29,20 @@ router.get("/adminCheck", jwtAuthenticatorAdmin, (req, res)=> {
 });
 
 
-
+router.get("/getData", jwtAuthenticatorAdmin, (req, res)=> {
+    db.getConnection((err, connection)=> {
+        connection.query("SELECT username, email, created_at, rank FROM users ORDER BY created_at DESC LIMIT 20", (err, results, fields)=> {
+            if(err) {
+                res.status(200).send({ok: false, error: "Couldnt get the user data from the database."});
+                return;
+            } else {
+                res.status(200).send({ok: true, data: results});
+                return;
+            }
+        });
+        connection.release();
+    });
+});
 
 
 module.exports = router;
