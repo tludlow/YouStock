@@ -4,6 +4,7 @@ import {browserHistory, Link} from "react-router";
 
 import Navbar from "../components/Navbar/Navbar";
 import Loading from "../components/Loading/Loading";
+import ImageComponent from "../components/ImageComponent/ImageComponent";
 
 export default class Home extends Component {
 
@@ -63,7 +64,7 @@ export default class Home extends Component {
 								<div className="col-xs-3" key={i}>
 									<div className="post" key={i} onClick={()=> this.redirectToPost(post.post_id)}>
 										<div className="img-holder">
-											<img src={"http://localhost:3001/img/uploads/" + post.image} alt={post.title}/>
+											<ImageComponent imageSrc={"http://localhost:3001/img/uploads/" + post.image} imageAlt={post.title} />
 											{post.sold ? <div className="centered-small">SOLD</div> : ""}
 										</div>
 										<h5>{post.title}</h5>
