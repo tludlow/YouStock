@@ -76,7 +76,7 @@ router.post("/signup", (req, res)=> {
 router.post("/login", (req, res)=> {
     const { username, password } = req.body;
     db.getConnection((err, connection)=> {
-        connection.query("SELECT username, email, password, banned FROM users WHERE username = ?", [username], (err, results, fields)=> {
+        connection.query("SELECT username, email, password, rank, banned FROM users WHERE username = ?", [username], (err, results, fields)=> {
             if(results.length == 0) {
                 res.status(200).send({ok: false, error: "No user with that username exists."});
             } else {

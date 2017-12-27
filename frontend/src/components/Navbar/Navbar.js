@@ -14,10 +14,17 @@ class Navbar extends Component {
 	navigateUser(path) {
 		browserHistory.push(path);
 	}
+	adminNavigate() {
+		if(this.props.user.rank === "admin")  {
+			browserHistory.push("/admin");
+			return;
+		}		
+	}
 
 	dropdown() {
 		if(this.props.user.loggedIn) {
-			return <DropdownButton id="dropdown" title={this.props.user.username} className="user-dropdown">
+			return <DropdownButton id="dropdown" title={this.props.user.username} className={"user-dropdown"}>
+						<MenuItem onClick={()=> this.adminNavigate()} className={this.props.user.rank + "-rank"}>{this.props.user.rank === "admin" ? "Admin Dashboard" : this.props.user.rank.charAt(0).toUpperCase() + this.props.user.rank.slice(1)}</MenuItem>
 						<MenuItem onClick={()=> this.navigateUser("/profile/" + this.props.user.username)}>Profile</MenuItem>
 						<MenuItem divider />
 						<MenuItem onClick={()=> this.logoutUser()}>Logout</MenuItem>
