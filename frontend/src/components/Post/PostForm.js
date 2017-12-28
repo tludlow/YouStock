@@ -46,8 +46,12 @@ class PostForm extends Component {
             this.setState({errors: "The cost should be a number, it can also contain a period/fullstop."});
             return;
         }
-        if(this.state.description.length > 400) {
-            this.setState({errors: "Your description is too long. It should be a maximum of 400 characters long."});
+        if(this.state.description.length > 400 || this.state.description.length < 30) {
+            this.setState({errors: "Your description doesnt meet the criteria specified."});
+            return;
+        }
+        if(title.length > 40) {
+            this.setState({errors: "Your title should not be longer than 40 characters."});
             return;
         }
         if(!file.type === "image/jpeg" || !file.type === "image/jpg" || !file.type === "image/png") {
@@ -99,6 +103,7 @@ class PostForm extends Component {
 
                     <fieldset>
                         <p>Description {this.state.description.length > 0 ? <span className="description-length">{this.state.description.length} / 400</span> : ""}</p>
+                        <small>Your description should be between 30 and 400 characters.</small>
                         <textarea id="" cols="30" rows="6" ref="postFormDescription" onChange={(e)=> this.descriptionType(e)} required></textarea>
                     </fieldset>
 
