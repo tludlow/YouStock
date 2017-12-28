@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Loading from "../components/Loading/Loading";
 
 import UserList from "../components/Admin/UserList";
+import SalesList from "../components/Admin/SalesList";
 
 export default class AdminView extends Component {
 
@@ -14,6 +15,7 @@ export default class AdminView extends Component {
         this.state = {
             loading: true,
             userData: null,
+            salesData: null,
             error: "",
         }
     }
@@ -37,9 +39,9 @@ export default class AdminView extends Component {
             if(response.data.ok === false) {
                 this.setState({loading: false, error: response.data.error});
                 return;
-            } else {
-                this.setState({loading: false, userData: response.data.userData});
-            }
+            } 
+            this.setState({loading: false, userData: response.data.userData, salesData: response.data.salesData});
+            return;
         }).catch((err)=> {
             this.setState({loading: false, error: "There was an error getting the page data."});
         });
@@ -66,6 +68,7 @@ export default class AdminView extends Component {
                 </div> 
             );
         }
+        console.log(this.state.salesData);
         return (
             <div className="admin-view">
                 <Navbar />
@@ -73,15 +76,20 @@ export default class AdminView extends Component {
                     <h3>Admin View</h3>
                     <p>Be careful, anything done on this page has a serious effect on this website.</p>
                     <hr/>
-                    <h5 className="title">Users</h5>
                     <div className="row">
                         <div className="col-xs-5">
+                            <h5 className="title">Users</h5>
                             <UserList userInformation={this.state.userData} />
+                        </div>
+                        <div className="col-xs-offset-1 col-xs-6">
+                            <h5 className="title">Sales</h5>
+                            <SalesList salesInformation={this.state.salesData} />
                         </div>
                     </div>
                 </div>
             </div>
         );
+        
         
     }
 	
