@@ -21,30 +21,6 @@ var jwtAuthenticator = async (req, res, next)=> {
     }
 };
 
-router.get("/createTest", (req,res)=> {
-    data = {username: "ThomasGangasd", email: "thomasiscsasdasddasdool@test.net", password: "asdasd@123as212qas."};
-    db.getConnection(function(err, connection) {
-        connection.query("INSERT INTO users SET ?", data, (err, results, fields) => {
-            if (err) throw err;
-        });
-        connection.release();
-    });
-    res.status(200).send(data);
-});
-
-router.get("/getUser/:username", (req,res)=> {
-    const username = req.params.username;
-    var gottenUser = {};
-    db.getConnection(function(err, connection) {
-        connection.query("SELECT username, email FROM users WHERE username = ?", [username], (err, results, fields) => {
-            if (err) throw err;
-
-            res.status(200).send(results);
-        });
-        connection.release();
-    });
-});
-
 var generateHash = function(password){
     return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
 }
@@ -52,75 +28,81 @@ var validPassword = function(password, hash){
     return bcrypt.compareSync(password, hash);
 }
 
-router.post("/signup", (req, res)=> {
+
+router.post("/signup", async (req, res)=> {
     const { username, email, password } = req.body;
     const toInsert = {username, email, password: generateHash(password)};
-    db.getConnection((err, connection)=> {
-        connection.query("SELECT COUNT(*) AS count FROM users WHERE username = ? or email = ?", [username, email], (err, results, fields)=> {
-            if(results[0].count > 0) {
-                console.log("Username or email already exists!");
-                res.status(200).send({ok: false, error: "A user with that username or email already exists in the system."});
-            } else {
-                connection.query("INSERT INTO users SET ?", toInsert, (err, results, fields)=> {
-                    if (err) throw err;
-                    let dataJWT = {username, email, rank: "user", iat: Math.floor(Date.now() / 1000) - 30};
-                    const token = jwt.sign(dataJWT, config.jwtSecret);
-                    res.status(200).send({ok: true, username, email, token, rank: "user"});
-                });
-            }
-        });
+
+    try {
+        var connection = await db.getConnection();
+        var doesUserExist = await connection.query("SELECT COUNT(*) AS count FROM users WHERE username = ? or email = ?", [username, email]);
+
+        if(doesUserExist[0].count > 0) {
+            res.status(200).send({ok: false, error: "A user with that username or email already exists in the system."});
+            return;
+        }
+
+        var insertingUser = await connection.query("INSERT INTO users SET ?", toInsert);
+        let dataJWT = {username, email, rank: "user", iat: Math.floor(Date.now() / 1000) - 30};
+        const token = jwt.sign(dataJWT, config.jwtSecret);
+
+        
+        res.status(200).send({ok: true, username, email, token, rank: "user"});
+    } catch(err) {
+        res.status(200).send({ok: false, error: "An error occured signing your user up."});
+    } finally {
         connection.release();
-    });
+    }
 });
 
-router.post("/login", (req, res)=> {
+router.post("/login", async (req, res)=> {
     const { username, password } = req.body;
-    db.getConnection((err, connection)=> {
-        connection.query("SELECT username, email, password, rank, banned FROM users WHERE username = ?", [username], (err, results, fields)=> {
-            if(results.length == 0) {
-                res.status(200).send({ok: false, error: "No user with that username exists."});
+    try {
+        var connection = await db.getConnection();
+        var checkForUser = await connection.query("SELECT username, email, password, rank, banned FROM users WHERE username = ?", [username]);
+        if(checkForUser.length == 0) {
+            res.status(200).send({ok: false, error: "No user with that username exists."});
+            return;
+        }
+
+        let returned = {
+            username: checkForUser[0].username,
+            email: checkForUser[0].email,
+            passwordHash: checkForUser[0].password,
+            banned: checkForUser[0].banned,
+            rank: checkForUser[0].rank
+        };
+        if(returned.banned == 1) {
+            var getReasonAndUnban = await connection.query("SELECT reason, unban_date FROM bans WHERE username = ?", [username]);
+            res.status(200).send({ok: false, error: "You have been banned.", reason: getReasonAndUnban[0].reason, unban_date: getReasonAndUnban[0].unban_date});
+        } else {
+            if(validPassword(password, returned.passwordHash)) {
+                let dataJWT = {username: returned.username, email: returned.email, rank: returned.rank, iat: Math.floor(Date.now() / 1000) - 30};
+                const token = jwt.sign(dataJWT, config.jwtSecret);
+                res.status(200).send({ok: true, username, token, rank: returned.rank});
             } else {
-                let returned = {
-                    username: results[0].username,
-                    email: results[0].email,
-                    passwordHash: results[0].password,
-                    banned: results[0].banned,
-                    rank: results[0].rank
-                };
-                if(returned.banned == 1) {
-                    connection.query("SELECT reason, unban_date FROM bans WHERE username = ?", [username], (err, results, fields)=> {
-                        console.log(results);
-                        res.status(200).send({ok: false, error: "You have been banned.", reason: results[0].reason, unban_date: results[0].unban_date});
-                    });
-                } else {
-                    if(validPassword(password, returned.passwordHash)) {
-                        //login
-                        let dataJWT = {username: returned.username, email: returned.email, rank: returned.rank, iat: Math.floor(Date.now() / 1000) - 30};
-                        const token = jwt.sign(dataJWT, config.jwtSecret);
-                        res.status(200).send({ok: true, username, token, rank: returned.rank});
-                    } else {
-                        //warn error
-                        res.status(200).send({ok: false, error: "Incorrect login details have been provided"});
-                    }
-                }
+                res.status(200).send({ok: false, error: "Incorrect login details have been provided"});
             }
-        });
+        }
+
+    } catch(err) {
+        res.status(200).send({ok: false, error: "There was an error logging your account into the system."});
+    } finally {
         connection.release();
-    });
+    }
 });
 
-router.get("/profile/:name", (req,res)=> {
+router.get("/profile/:name", async (req,res)=> {
     const name = req.params.name;
-    db.getConnection((err, connection)=> {
-        connection.query("SELECT username, rank, created_at FROM users WHERE username = ?", [name], (err, results, fields)=> {
-            if(err) {
-                res.status(200).send({ok: false, error: "An error occured querying the data for your profile."});
-                return;
-            }
-            res.status(200).send({ok: true, profile: results[0]});
-        });
+    try {
+        var connection = await db.getConnection();
+        var gottenProfile = await connection.query("SELECT username, rank, created_at FROM users WHERE username = ?", [name]);
+        res.status(200).send({ok: true, profile: gottenProfile[0]});
+    } catch(err) {
+        res.status(200).send({ok: false, error: "An error occured querying the data for your profile."});
+    } finally {
         connection.release();
-    });
+    }
 });
 
 
