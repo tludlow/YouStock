@@ -18,6 +18,7 @@ export default class PostView extends Component {
             post: null,
             comments: null,
             commentCount: 0,
+            showPayment: false,
         };
     }
 
@@ -33,6 +34,10 @@ export default class PostView extends Component {
         });
     }
 
+    changePaymentOption() {
+        this.state.showPayment === false ? this.setState({showPayment: true}) : this.setState({showPayment: false});
+    }
+
     checkPurchase() {
         if(!this.props.user.loggedIn) {
             return <p className="error">You must be logged in to purchase items.</p>
@@ -40,7 +45,13 @@ export default class PostView extends Component {
         if(this.state.post.sold) {
             return <p className="error">You can't purchase already sold items.</p>
         }
-        return <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} />
+
+        if(this.state.showPayment) {
+            return <Checkout title={this.state.post.title} cost={this.state.post.cost} post_id={this.state.post.post_id} username={this.props.user.username} />
+        } else {
+            return <button onClick={()=> this.changePaymentOption()} >Purchase {this.state.post.title}</button>
+        }
+        
     }
 
     commentHandler(){
