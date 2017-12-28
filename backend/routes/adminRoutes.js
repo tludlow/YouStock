@@ -24,6 +24,8 @@ var jwtAuthenticatorAdmin = async (req, res, next)=> {
     }
 };
 
+//Used to make sure the user trying to access the page is able to recieve data back from this endpoint.
+//If they can they are an admin and we return ok == true if not they are just a user and we return ok == false.
 router.get("/adminCheck", jwtAuthenticatorAdmin, (req, res)=> {
     res.status(200).send({ok: true, hello: "hello"});
 });

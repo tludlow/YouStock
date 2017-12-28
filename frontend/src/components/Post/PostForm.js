@@ -104,6 +104,7 @@ class PostForm extends Component {
 
                     <fieldset>
                         <p>Picture</p>
+                        <small>Files are only accepted under 1.5MB and of the type .JPEG, .JPG and .PNG</small><br/><br/>
                         {this.state.file ? <p>{this.state.file.name}</p> : ""}
                         {this.state.fileSrc.length > 0 ? <img className="preview-image" src={this.state.fileSrc} alt={this.state.file.name} /> : ""}
                         <label htmlFor="postFormFileInput" className="custom-file-upload">

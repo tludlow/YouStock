@@ -40,6 +40,10 @@ app.use((req, res) => {
     res.status(404).send(endpointError);
 });
 
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
 var server = http.createServer(app);
 server.listen(port);
 module.exports = app;
