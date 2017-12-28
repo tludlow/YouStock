@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 
-import Loading from "../Loading/Loading";
 
 export default class ImageComponent extends Component {
 

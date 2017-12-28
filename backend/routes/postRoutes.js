@@ -62,7 +62,7 @@ router.get("/frontpage/:page", (req, res)=> {
     const limit = 20;
     if(page == 1) {
         db.getConnection((err, connection)=> {
-            connection.query("SELECT * FROM posts WHERE removed = 0 AND sold = 0 ORDER BY posted_at DESC LIMIT ?", [limit], (err, results, fields)=> {
+            connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT ?", [limit], (err, results, fields)=> {
                 if (err) throw err;
                 if(results.length == 0) {
                     res.status(200).send({ok: false, error: "No posts exist!"});

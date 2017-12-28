@@ -5,13 +5,15 @@ import {browserHistory} from "react-router";
 import Navbar from "../components/Navbar/Navbar";
 import Loading from "../components/Loading/Loading";
 
+import UserList from "../components/Admin/UserList";
+
 export default class AdminView extends Component {
 
     constructor(props) {
         super();
         this.state = {
             loading: true,
-            adminData: null,
+            userData: null,
             error: "",
         }
     }
@@ -36,7 +38,7 @@ export default class AdminView extends Component {
                 this.setState({loading: false, error: response.data.error});
                 return;
             } else {
-                this.setState({loading: false, data: response.data.data});
+                this.setState({loading: false, userData: response.data.userData});
             }
         }).catch((err)=> {
             this.setState({loading: false, error: "There was an error getting the page data."});
@@ -64,7 +66,6 @@ export default class AdminView extends Component {
                 </div> 
             );
         }
-
         return (
             <div className="admin-view">
                 <Navbar />
@@ -73,16 +74,15 @@ export default class AdminView extends Component {
                     <p>Be careful, anything done on this page has a serious effect on this website.</p>
                     <hr/>
                     <h5 className="title">Users</h5>
-                    {this.state.data.map((user, i)=> (
-                       <div className="row">
-                            <div className="col-xs-4">
-                                <h5>{user.username} - {user.email} - {user.rank}</h5>
-                            </div>
-                       </div> 
-                    ))}
+                    <div className="row">
+                        <div className="col-xs-5">
+                            <UserList userInformation={this.state.userData} />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
+        
     }
 	
 }
