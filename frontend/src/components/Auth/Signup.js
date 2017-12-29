@@ -13,6 +13,7 @@ class Signup extends Component {
 	
 	componentDidMount(){
 		this.setState({errors: ""});
+		this.props.clearUserStateOfErrors();
 	}
 	onSignup(e) {
 		e.preventDefault();

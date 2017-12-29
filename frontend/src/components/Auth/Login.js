@@ -5,6 +5,10 @@ import * as actionCreators from '../../actions/actionCreators';
 
 class Login extends Component {
 
+	componentDidMount() {
+		this.props.clearUserStateOfErrors();
+	}
+
 	onLogin(e) {
 		e.preventDefault();
 		var username = this.refs.loginFormUsername.value;
