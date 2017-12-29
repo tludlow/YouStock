@@ -64,7 +64,7 @@ export default class AdminView extends Component {
         var reason = this.refs.removePostReason.value;
 
         const config = {headers: {'Authorization': `Token ${this.props.user.token}`}};
-        axios.post("http://localhost:3001/admin/removePost", {reason, post_id: this.state.modalPost_id}, config).then((response)=> {
+        axios.post("http://localhost:3001/admin/removePost", {reason, post_id: this.state.modalPost_id, removed_by: this.props.user.username}, config).then((response)=> {
             if(response.data.ok === false) {
                 this.setState({removeError: response.data.error});
                 return;

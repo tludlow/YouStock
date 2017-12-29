@@ -46,15 +46,14 @@ router.get("/getData", jwtAuthenticatorAdmin, async (req, res)=> {
 });
 
 router.post("/removePost", jwtAuthenticatorAdmin, async (req, res)=> {
-    var {reason, post_id } = req.body;
+    var {reason, post_id, removed_by} = req.body;
     try {
         var connection = await db.getConnection();
         var query = await connection.query("UPDATE posts SET removed = 1 WHERE post_id = ?", [post_id]);
-        var query2 = await connection.query("INSERT INTO post_removals (post_id, reason) VALUES(?, ?)", [post_id, reason]);
+        var query2 = await connection.query("INSERT INTO post_removals (post_id, reason) VALUES(?, ?, ?)", [post_id, reason, removed_by]);
         res.status(200).send({ok: true});
     } catch (err) {
-        console.log(err);
-        res.status(200).send({ok: false, error: "hmm"});
+        res.status(200).send({ok: false, error: "An error occured removing that post from the database."});
     } finally {
         connection.release();
     }
@@ -72,7 +71,7 @@ router.get("/getRemovalInfo/:post", jwtAuthenticatorAdmin, async (req, res)=> {
             res.status(200).send({ok: true, post_id: query[0].post_id, title: query[0].title, posted_by: query[0].posted_by});
         }
     } catch (err) {
-        res.status(200).send({ok: false, error: "An error occured update the post data for removal."});
+        res.status(200).send({ok: false, error: "An error occured finding that post in the database."});
     } finally {
         connection.release();
     }
