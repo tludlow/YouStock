@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `post_removals` (
   `post_id` int(11) NOT NULL,
   `reason` varchar(300) NOT NULL,
   `removed_by` varchar(30) NOT NULL,
+  `removed_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY `removal_id` (`removal_id`),
   KEY `FK__posts5` (`post_id`),
   KEY `FK_post_removals_users` (`removed_by`),
