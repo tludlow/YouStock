@@ -171,7 +171,7 @@ h1 {
     font-weight: bold;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=date], select, textarea {
+input[type=text], input[type=email], input[type=password], input[type=date], input[type=number], select, textarea {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -391,7 +391,6 @@ hr {
 form {
     margin-bottom: 40px;
     padding-bottom: 40px;
-    border-bottom: 3px solid #e6ebf1;
     font-family: "Montserrat", sans-serif;
 }
 
@@ -517,7 +516,33 @@ form {
     color: lighten(black, 40);
     font-size: 14px;
 }
-
+//modal styles
+.modal-title {
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+}
+.modal-body {
+    text-align: center;
+}
+.placeholder-center {
+    :-webkit-input-placeholder {
+        text-align: center;
+     }
+     
+     :-moz-placeholder { /* Firefox 18- */
+        text-align: center;  
+     }
+     
+     ::-moz-placeholder {  /* Firefox 19+ */
+        text-align: center;  
+     }
+     
+     :-ms-input-placeholder {  
+        text-align: center; 
+     }
+     text-align: center;
+}
 
 
 

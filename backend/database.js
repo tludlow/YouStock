@@ -9,6 +9,7 @@ function connectDatabase() {
             user     : 'root',
             password : 'root',
             database : 'yousell',
+            //debug: ['ComQueryPacket']
           });
     }
     return db;

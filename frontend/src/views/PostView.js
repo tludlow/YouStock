@@ -14,7 +14,7 @@ export default class PostView extends Component {
         super();
         this.state = {
             loading: true,
-            error: false,
+            error: "",
             post: null,
             comments: null,
             commentCount: 0,
@@ -28,7 +28,7 @@ export default class PostView extends Component {
                 this.setState({loading: false, post: response.data.post, commentCount: response.data.commentCount, comments: response.data.comments});
                 return;
             }
-            this.setState({loading: false, error: true});
+            this.setState({loading: false, error: response.data.error});
         }).catch((err)=> {
             this.setState({error: true});
         });
@@ -91,12 +91,13 @@ export default class PostView extends Component {
                 </div>
             );
         }
-        if(this.state.error) {
+        if(this.state.error.length > 0) {
             return(
                 <div className="post-view">
                     <Navbar />
                     <div className="container">
                         <h3>There was an error loading the post with id {this.props.params.id}</h3>
+                        <p className="error">{this.state.error}</p>
                     </div>
                 </div>
             );
