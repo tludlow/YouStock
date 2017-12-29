@@ -45,16 +45,6 @@ router.get("/getData", jwtAuthenticatorAdmin, async (req, res)=> {
     }
 });
 
-router.get("/meow", async (req, res)=> {
-    try {
-        var connection = await db.getConnection();
-        var results= await connection.query("SELECT * FROM sales");
-        res.status(200).send({ok: true, results});
-    } catch(err) {
-        res.status(200).send({ok: false, error: "database query error"});
-    }
-});
-
 router.post("/removePost", jwtAuthenticatorAdmin, async (req, res)=> {
     var {reason, post_id } = req.body;
     try {
