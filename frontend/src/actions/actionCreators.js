@@ -23,6 +23,9 @@ export function userLoginFailure(err) {
 export function userLogout() {
     return {type: 'USER_LOGOUT'}
 }
+export function clearUserStateOfErrors() {
+    return {type: 'REFRESH_ERROR_STATE'}
+}
 
 //Create a new user on form submit.
 export function signUpUser(username, email, password) {

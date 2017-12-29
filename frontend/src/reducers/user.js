@@ -3,6 +3,8 @@ function user(state = {}, action) {
 	switch (action.type) {
 		case 'USER_LOGOUT':
 			return {...state, loggedIn: false, loading: false, username: "", token: "", rank: "", errors: ""}
+		case 'REFRESH_ERROR_STATE':
+			return {...state, errors: ""}
 		case 'USER_SIGNUP_REQUEST':
 			return {...state, loading: true, errors: ""}
 		case 'USER_SIGNUP_FAILURE':
