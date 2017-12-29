@@ -63,7 +63,6 @@ router.post("/removePost", jwtAuthenticatorAdmin, async (req, res)=> {
         var query2 = await connection.query("INSERT INTO post_removals (post_id, reason) VALUES(?, ?)", [post_id, reason]);
         res.status(200).send({ok: true});
     } catch (err) {
-        console.log(err);
         res.status(200).send({ok: false, error: "hmm"});
     } finally {
         connection.release();
