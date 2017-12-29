@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import {browserHistory} from "react-router";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 import Navbar from "../components/Navbar/Navbar";
 import Loading from "../components/Loading/Loading";

@@ -59,8 +59,8 @@ router.get("/frontpage/:page", async (req, res)=> {
     const page = parseInt(req.params.page);
     const limit = 20;
     if(page == 1) {
+        var connection = await db.getConnection();
         try {
-            var connection = await db.getConnection();
             let results = await connection.query("SELECT * FROM posts WHERE removed = 0 ORDER BY posted_at DESC LIMIT ?", [limit]);
             if(results.length == 0) {
                 res.status(200).send({ok: false, error: "No posts exist!"});

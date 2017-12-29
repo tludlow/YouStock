@@ -33,8 +33,8 @@ router.post("/signup", async (req, res)=> {
     const { username, email, password } = req.body;
     const toInsert = {username, email, password: generateHash(password)};
 
+    var connection = await db.getConnection();
     try {
-        var connection = await db.getConnection();
         var doesUserExist = await connection.query("SELECT COUNT(*) AS count FROM users WHERE username = ? or email = ?", [username, email]);
 
         if(doesUserExist[0].count > 0) {
