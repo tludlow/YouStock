@@ -101,6 +101,7 @@ export default class AdminView extends Component {
 
     findRemovalPostInfo(e) {
         e.preventDefault();
+        this.setState({findError: ""});
         const config = {headers: {'Authorization': `Token ${this.props.user.token}`}};
         axios.get("http://localhost:3001/admin/getRemovalInfo/" + this.refs.removePostGetId.value, config).then((response)=> {
             if(response.data.ok === false) {

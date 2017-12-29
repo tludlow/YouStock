@@ -34,7 +34,7 @@ router.get("/adminCheck", jwtAuthenticatorAdmin, (req, res)=> {
 router.get("/getData", jwtAuthenticatorAdmin, async (req, res)=> {
     try {
         var connection = await db.getConnection();
-        var userData = await connection.query("SELECT user_id, username, email, created_at, rank FROM users ORDER BY created_at DESC LIMIT 20");
+        var userData = await connection.query("SELECT user_id, username, email, created_at, rank FROM users ORDER BY created_at, rank DESC LIMIT 20");
         var salesData = await connection.query("SELECT sales.sale_id, sales.username, sales.sold_at, posts.title, posts.body, posts.cost FROM sales, posts WHERE sales.post_id = posts.post_id");
         res.status(200).send({ok: true, userData, salesData});
         

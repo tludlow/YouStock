@@ -73,12 +73,12 @@ class PostForm extends Component {
         };
         axios.post("http://localhost:3001/post/create", formData, config).then((response)=> {
             if(response.data.ok === true) {
-                browserHistory.push("/");
+                browserHistory.push("/post/" + response.data.post_id);
             } else {
-                console.log(response);
+                this.setState({errors: "An error occured creating your post. 1"});
             }
         }).catch((error)=> {
-            console.log(error);
+            this.setState({errors: "An error occured creating your post. 2"});
         });
     }
 

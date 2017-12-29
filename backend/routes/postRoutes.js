@@ -47,7 +47,7 @@ router.post("/create", jwtAuthenticator, upload.single("image"), async (req,res)
     try {
         var connection = await db.getConnection();
         let insertImage = await connection.query("INSERT INTO posts SET ?", toInsert);
-        res.status(200).send({ok: true});
+        res.status(200).send({ok: true, post_id: insertImage.insertId});
     } catch (err) {
         res.status(200).send({ok: false, error: "An error occured inserting your file into the database."});
     } finally {
