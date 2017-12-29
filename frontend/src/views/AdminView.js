@@ -155,7 +155,6 @@ export default class AdminView extends Component {
                         <div className="col-xs-4">
                             <h5 className="title">Remove Post</h5>
                             <br/>
-                            hello
                             <p>Please type the id of the post you want to remove.</p>
                             <p>This can be found in the url of the post <strong>'/post/ID_HERE</strong>'</p>
                             {this.state.findError ? <p className="error">{this.state.findError}</p> : ""}
