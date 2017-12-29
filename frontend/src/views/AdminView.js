@@ -151,6 +151,11 @@ export default class AdminView extends Component {
                             <SalesList salesInformation={this.state.salesData} />
                         </div>
                     </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
                     <div className="row">
                         <div className="col-xs-4">
                             <h5 className="title">Remove Post</h5>
