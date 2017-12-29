@@ -385,13 +385,13 @@ hr {
     max-width: 800px;
     box-sizing: border-box;
     padding: 0 5px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat", sans-serif !important;
 }
 
 form {
     margin-bottom: 40px;
     padding-bottom: 40px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat", sans-serif !important;
 }
 
 .stripe-submit, button {
@@ -415,7 +415,7 @@ form {
     -webkit-transition: all 150ms ease;
     transition: all 150ms ease;
     margin-top: 10px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat", sans-serif !important;
 }
 
 .StripeElement {
@@ -426,15 +426,15 @@ form {
     box-shadow: rgba(50, 50, 93, 0.14902) 0px 1px 3px, rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
     border-radius: 4px;
     background: white;
-    font-family: "Montserrat", sans-serif;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat", sans-serif !important;
+    font-family: "Montserrat", sans-serif !important;
 }
 
 .StripeElement--focus {
     box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
     -webkit-transition: all 150ms ease;
     transition: all 150ms ease;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat", sans-serif !important;
 }
 
 .approved {

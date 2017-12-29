@@ -32,7 +32,7 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
             throw err;  
             return;    
         }
-        connection.query("SELECT cost, sold FROM posts WHERE post_id = ?", [post_id], (err, results, fields)=> {
+        connection.query("SELECT cost, sold, posted_by FROM posts WHERE post_id = ?", [post_id], (err, results, fields)=> {
             if(err) {
                 res.status(200).send({ok: false, error: "There was an error, please try again. stage 2"});
                 throw err;  
@@ -40,6 +40,10 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
             }
             if(results[0].sold == 1) {
                 res.status(200).send({ok: false, error: "Somebody already purchased this item, unlucky."});
+                return;
+            }
+            if(results[0].posted_by == username) {
+                res.status(200).send({ok: false, error: "You can't buy your own product, that would be weird."});
                 return;
             }
             cost = Math.ceil((results[0].cost) * 100);
@@ -51,7 +55,6 @@ router.post("/charge", jwtAuthenticator, (req, res)=> {
                 source: token,
             }, function(err, charge) {
                 if(err) {
-                    console.log(err);
                     res.status(200).send({ok: false, error: "An error occured, stage 3"});
                     return;
                 } else {
