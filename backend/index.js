@@ -3,6 +3,7 @@ const express = require("express");
 const http = require("http");
 const bodyParser = require('body-parser');
 const db = require("./database");
+var cors = require('cors')
 
 const app = express();
 const port = 3001;
@@ -12,16 +13,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use(function(req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    //res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Content-Length, Authorization");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header('Cache-Control', 'no-cache');
-  next();
-});
-app.disable('view cache');
+
+app.use(cors());
 
 //File imports
 const userRoutes = require("./routes/userRoutes");
