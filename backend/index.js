@@ -2,6 +2,9 @@
 const express = require("express");
 const http = require("http");
 const bodyParser = require('body-parser');
+const db = require("./database");
+const cron = require("node-cron");
+const moment = require("moment");
 
 const app = express();
 const port = 3001;
@@ -38,6 +41,30 @@ app.use("/admin", adminRoutes);
 const endpointError = {status: 404, error: "No Endpoint Found"}
 app.use((req, res) => {
     res.status(404).send(endpointError);
+});
+
+//Runs every hour on the 1st minute to check if unbans should occur.
+cron.schedule('00 01 * * * *', async function() {
+    try {
+        var connection = await db.getConnection();
+        var gottenBans = await connection.query("SELECT ban_id, username, unban_date FROM bans WHERE active = 1");
+        var currentDate = moment();
+        
+        gottenBans.forEach(element => {
+            var unbanDate = moment(element.unban_date);
+            var difference = unbanDate.diff(currentDate, "days");
+            if(difference == 0) {
+                //Unban the user.
+                var unbanQuery1 = await connection.query("UPDATE bans SET active = 0 WHERE ban_id = ?", [element.ban_id]);
+                var unbanQuery2 = await connection.query("UPDATE users SET banned = 0 WHERE username = ?", [element.username]);
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    } finally {
+        connection.release();
+    }
+
 });
 
 process.on('unhandledRejection', (reason, p) => {
