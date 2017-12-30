@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../database");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
+const moment = require("moment");
 
 var jwtAuthenticatorAdmin = async (req, res, next)=> {
     const auth = req.get("authorization") || req.get("Authorization");
@@ -46,16 +47,41 @@ router.get("/getData", jwtAuthenticatorAdmin, async (req, res)=> {
 });
 
 router.post("/removePost", jwtAuthenticatorAdmin, async (req, res)=> {
-    var {reason, post_id, removed_by} = req.body;
-    try {
-        var connection = await db.getConnection();
-        var query = await connection.query("UPDATE posts SET removed = 1 WHERE post_id = ?", [post_id]);
-        var query2 = await connection.query("INSERT INTO post_removals (post_id, reason, removed_by) VALUES(?, ?, ?)", [post_id, reason, removed_by]);
-        res.status(200).send({ok: true});
-    } catch (err) {
-        res.status(200).send({ok: false, error: "An error occured removing that post from the database."});
-    } finally {
-        connection.release();
+    var {reason, offender, post_id, removed_by, shouldBan, banLength} = req.body;
+    if(shouldBan != "undefined") {
+        var unbanDate;
+        if(banLength == 1 ){
+            unbanDate = moment().add(1, "days").format('YYYY-MM-DD HH:mm:ss');
+        }
+        if(banLength == 2) {
+            unbanDate = moment().add(7, "days").format('YYYY-MM-DD HH:mm:ss');
+        }
+        if(banLength == 3) {
+            unbanDate = moment().add(500, "years").format('YYYY-MM-DD HH:mm:ss');
+        }
+        try {
+            var connection = await db.getConnection();
+            var query = await connection.query("UPDATE posts SET removed = 1 WHERE post_id = ?", [post_id]);
+            var query2 = await connection.query("INSERT INTO post_removals (post_id, reason, removed_by) VALUES(?, ?, ?)", [post_id, reason, removed_by]);
+            var query3 = await connection.query("INSERT INTO bans (username, banned_by, reason, unban_date) VALUES(?, ?, ?, ?)", [offender, removed_by, reason, unbanDate]);
+            var query4 = await connection.query("UPDATE users SET banned = 1 WHERE username = ?", [offender]);
+            res.status(200).send({ok: true});
+        } catch (err) {
+            res.status(200).send({ok: false, error: "An error occured removing that post from the database."});
+        } finally {
+            connection.release();
+        }
+    } else {
+        try {
+            var connection = await db.getConnection();
+            var query = await connection.query("UPDATE posts SET removed = 1 WHERE post_id = ?", [post_id]);
+            var query2 = await connection.query("INSERT INTO post_removals (post_id, reason, removed_by) VALUES(?, ?, ?)", [post_id, reason, removed_by]);
+            res.status(200).send({ok: true});
+        } catch (err) {
+            res.status(200).send({ok: false, error: "An error occured removing that post from the database."});
+        } finally {
+            connection.release();
+        }
     }
 });
 

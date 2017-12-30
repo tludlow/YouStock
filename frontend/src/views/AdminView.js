@@ -24,6 +24,8 @@ export default class AdminView extends Component {
             modalTitle: "Loading",
             modalPosted_by: "ExampleUser",
             removeError: "",
+            shouldBan: false,
+            banLength: 0
         }
     }
 
@@ -58,13 +60,33 @@ export default class AdminView extends Component {
         this.setState({showModalRemovePost: false});
     }
 
+    changeBanLength(banLength) {
+        if(banLength === 1) {
+            this.setState({banLength: 1});
+        }
+        if(banLength === 2) {
+            this.setState({banLength: 2});
+        }
+        if(banLength === 3) {
+            this.setState({banLength: 3});
+        }
+    }
+
     submitModalRemovePost(e) {
         e.preventDefault();
 
         var reason = this.refs.removePostReason.value;
+        var data = {reason, post_id: this.state.modalPost_id, removed_by: this.props.user.username, offender: this.state.modalPosted_by};
+
+        var shouldBan = this.state.shouldBan;
+        if(shouldBan) {
+            data.shouldBan = true;
+            data.banLength = this.state.banLength;
+        }
+        
 
         const config = {headers: {'Authorization': `Token ${this.props.user.token}`}};
-        axios.post("http://localhost:3001/admin/removePost", {reason, post_id: this.state.modalPost_id, removed_by: this.props.user.username}, config).then((response)=> {
+        axios.post("http://localhost:3001/admin/removePost", data, config).then((response)=> {
             if(response.data.ok === false) {
                 this.setState({removeError: response.data.error});
                 return;
@@ -90,7 +112,15 @@ export default class AdminView extends Component {
                     <br/>
                     <form onSubmit={(e)=> this.submitModalRemovePost(e)}>
                         <p>What is the reason for you removing this post?</p>
-                        <input type="text" className="placeholder-center" ref="removePostReason"/>
+                        <input type="text" className="placeholder-center" ref="removePostReason"/><br/>
+                        <p>Would you also like to ban this user?</p>
+                        <input type="checkbox" name="banOrNot" value="toBan" ref="removePostCheckboxBan" onClick={()=> this.toggleCheckbox()} />   Yes<br/>
+                        <br/>
+                        <input type="radio" name="banLength" onClick={()=> this.changeBanLength(1)} disabled={!this.state.shouldBan}/><span className="gap-right">One Day</span>          
+                        <input type="radio" name="banLength" onClick={()=> this.changeBanLength(2)} disabled={!this.state.shouldBan} /><span className="gap-right">One Week</span>          
+                        <input type="radio" name="banLength" onClick={()=> this.changeBanLength(3)} disabled={!this.state.shouldBan} /><span className="gap-right">Permanent</span>
+                        <br/>
+                        <br/>
                         {this.state.removeError ?<p className="error">{this.state.removeError}</p> : ""}
                         <input type="submit" value="Remove Post" className="btn btn-success submit" />
                     </form>
@@ -112,6 +142,14 @@ export default class AdminView extends Component {
         }).catch((err)=> {
             this.setState({findError: "There was an error finding the post data for the post with id " + this.refs.removePostGetId.value});
         });
+    }
+
+    toggleCheckbox() {
+        if(this.state.shouldBan === true) {
+            this.setState({shouldBan: false});
+        } else {
+            this.setState({shouldBan: true});
+        }
     }
 
     render() {
