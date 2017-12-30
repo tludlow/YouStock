@@ -43,18 +43,20 @@ app.use((req, res) => {
     res.status(404).send(endpointError);
 });
 
-//Runs every hour on the 1st minute to check if unbans should occur.
-cron.schedule('00 01 * * * *', async function() {
+//Run every day at 1 second past 12 at night.
+cron.schedule('01 00 00 * * *', async function() {
     try {
         var connection = await db.getConnection();
         var gottenBans = await connection.query("SELECT ban_id, username, unban_date FROM bans WHERE active = 1");
         var currentDate = moment();
+        console.log("Running unban scheduler - " + currentDate.format("YYYY-MM-DD HH-mm-ss"));
         
-        gottenBans.forEach(element => {
+        gottenBans.forEach(async element => {
             var unbanDate = moment(element.unban_date);
             var difference = unbanDate.diff(currentDate, "days");
-            if(difference == 0) {
+            if(unbanDate.isSame(currentDate, "day")) {
                 //Unban the user.
+                console.log("Unbanned User: " + element.username);
                 var unbanQuery1 = await connection.query("UPDATE bans SET active = 0 WHERE ban_id = ?", [element.ban_id]);
                 var unbanQuery2 = await connection.query("UPDATE users SET banned = 0 WHERE username = ?", [element.username]);
             }
