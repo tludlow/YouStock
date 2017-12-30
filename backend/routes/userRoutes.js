@@ -15,7 +15,20 @@ var jwtAuthenticator = async (req, res, next)=> {
     const token = auth.split(" ")[1]; //come in the form Bearer TOKENHERE, we only want the TOKENHERE bit.
     try {
         var decodedToken = await jwt.verify(token, config.jwtSecret);
-        next();
+        //Check if the user is banned.
+        try {  
+            var connection = await db.getConnection();
+            var query = await connection.query("SELECT COUNT(*) AS count FROM bans WHERE username = ?", [decodedToken.username]);
+            if(query[0].count > 0) {
+                res.status(200).send({ok: false, error: "You have been banned. Logout of your account and try and log in again to see why."});
+            } else {
+                next();
+            }
+        } catch (err) {
+            res.status(200).send({ok: false, error: "An error occured processing your auth token."});
+        } finally {
+            connection.release();
+        }
     } catch (err) {
         res.status(200).send({ok: false, error: "Invalid auth token"});
     }

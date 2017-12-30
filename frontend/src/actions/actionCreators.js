@@ -49,7 +49,11 @@ export function loginUser(username, password) {
     return dispatch => {
         return axios.post('http://localhost:3001/user/login', {username, password}).then((response) => {
             if(response.data.ok === false) {
-                dispatch(userLoginFailure(response.data.error));
+                if(response.data.error === "You have been banned.") {
+                    dispatch(userLoginFailure("You have been banned. Reason: " + response.data.reason + " You will be unbanned on the " + response.data.unban_date.split("T")[0] + " (YYYY-MM-DD)"));
+                } else {
+                    dispatch(userLoginFailure(response.data.error));
+                }
             } else {
                 localStorage.setItem("token", response.data.token);
                 dispatch(userLoginSuccess(response.data));

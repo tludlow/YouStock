@@ -15,11 +15,39 @@ var jwtAuthenticatorAdmin = async (req, res, next)=> {
     try {
         var decodedToken = await jwt.verify(token, config.jwtSecret);
         if(decodedToken.rank == "admin") {
-            next();
+            try {  
+                var connection = await db.getConnection();
+                var query = await connection.query("SELECT COUNT(*) AS count FROM bans WHERE username = ?", [decodedToken.username]);
+                if(query[0].count > 0) {
+                    res.status(200).send({ok: false, error: "You have been banned. Logout of your account and try and log in again to see why."});
+                } else {
+                    next();
+                }
+            } catch (err) {
+                res.status(200).send({ok: false, error: "An error occured processing your auth token."});
+            } finally {
+                connection.release();
+            }
         } else {
             res.status(200).send({ok: false, error: "Invalid rank on your auth token"});
             return;
         }
+    } catch (err) {
+        res.status(200).send({ok: false, error: "Invalid auth token"});
+    }
+};
+
+var jwtAuthenticator = async (req, res, next)=> {
+    const auth = req.get("authorization");
+    if(!auth || typeof auth === "undefined") {
+        res.status(200).send({ok: false, error: "Invalid auth token"});
+        return;
+    }
+    const token = auth.split(" ")[1]; //come in the form Bearer TOKENHERE, we only want the TOKENHERE bit.
+    try {
+        var decodedToken = await jwt.verify(token, config.jwtSecret);
+        //Check if the user is banned.
+        
     } catch (err) {
         res.status(200).send({ok: false, error: "Invalid auth token"});
     }
@@ -48,7 +76,7 @@ router.get("/getData", jwtAuthenticatorAdmin, async (req, res)=> {
 
 router.post("/removePost", jwtAuthenticatorAdmin, async (req, res)=> {
     var {reason, offender, post_id, removed_by, shouldBan, banLength} = req.body;
-    if(shouldBan != "undefined") {
+    if(typeof shouldBan != "undefined") {
         var unbanDate;
         if(banLength == 1 ){
             unbanDate = moment().add(1, "days").format('YYYY-MM-DD HH:mm:ss');
@@ -61,6 +89,11 @@ router.post("/removePost", jwtAuthenticatorAdmin, async (req, res)=> {
         }
         try {
             var connection = await db.getConnection();
+            var checkQuery = await connection.query("SELECT rank FROM users WHERE username = ?", [offender]);
+            if(checkQuery[0].rank == "admin") {
+                res.status(200).send({ok: false, error: "You cannot ban other administrators."});
+                return;
+            }
             var query = await connection.query("UPDATE posts SET removed = 1 WHERE post_id = ?", [post_id]);
             var query2 = await connection.query("INSERT INTO post_removals (post_id, reason, removed_by) VALUES(?, ?, ?)", [post_id, reason, removed_by]);
             var query3 = await connection.query("INSERT INTO bans (username, banned_by, reason, unban_date) VALUES(?, ?, ?, ?)", [offender, removed_by, reason, unbanDate]);

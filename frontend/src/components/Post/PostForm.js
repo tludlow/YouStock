@@ -75,7 +75,7 @@ class PostForm extends Component {
             if(response.data.ok === true) {
                 browserHistory.push("/post/" + response.data.post_id);
             } else {
-                this.setState({errors: "An error occured creating your post. 1"});
+                this.setState({errors: response.data.error});
             }
         }).catch((error)=> {
             this.setState({errors: "An error occured creating your post. 2"});
