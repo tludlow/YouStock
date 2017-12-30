@@ -4,7 +4,7 @@ const db = require("../database");
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
-
+const moment = require("moment");
 
 var jwtAuthenticator = async (req, res, next)=> {
     const auth = req.get("authorization");
@@ -86,8 +86,25 @@ router.post("/login", async (req, res)=> {
             rank: checkForUser[0].rank
         };
         if(returned.banned == 1) {
-            var getReasonAndUnban = await connection.query("SELECT reason, unban_date FROM bans WHERE username = ?", [username]);
-            res.status(200).send({ok: false, error: "You have been banned.", reason: getReasonAndUnban[0].reason, unban_date: getReasonAndUnban[0].unban_date});
+            var getReasonAndUnban = await connection.query("SELECT ban_id, reason, unban_date FROM bans WHERE username = ? AND active = 1", [username]);
+            //check if they should be unbanned.
+            var currentDate = moment();
+            var unbanDate = moment(getReasonAndUnban[0].unban_date);
+            if(unbanDate.isSameOrAfter(currentDate, "days")) {
+                //unban this user
+                var unbanQuery1 = await connection.query("UPDATE bans SET active = 0 WHERE ban_id = ?", [getReasonAndUnban[0].ban_id]);
+                var unbanQuery2 = await connection.query("UPDATE users SET banned = 0 WHERE username = ?", [username]);
+                if(validPassword(password, returned.passwordHash)) {
+                    let dataJWT = {username: returned.username, email: returned.email, rank: returned.rank, iat: Math.floor(Date.now() / 1000) - 30};
+                    const token = jwt.sign(dataJWT, config.jwtSecret);
+                    res.status(200).send({ok: true, username, token, rank: returned.rank});
+                } else {
+                    res.status(200).send({ok: false, error: "Incorrect login details have been provided"});
+                }
+                
+            } else {
+                res.status(200).send({ok: false, error: "You have been banned.", reason: getReasonAndUnban[0].reason, unban_date: getReasonAndUnban[0].unban_date});
+            }   
         } else {
             if(validPassword(password, returned.passwordHash)) {
                 let dataJWT = {username: returned.username, email: returned.email, rank: returned.rank, iat: Math.floor(Date.now() / 1000) - 30};
