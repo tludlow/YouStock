@@ -40,12 +40,12 @@ import store, {history} from './store';
 // }
 
 function requireAuthAdmin() {
-  return(nextState, replace) => {
-    let currentState = store.getState();
-    if(!currentState.user.loggedIn && !currentState.user.rank === "admin") {
-      replace({ pathname: "/" });
-    }
-  };
+    return(nextState, replace) => {
+        let currentState = store.getState();
+        if(!currentState.user.loggedIn && !currentState.user.rank === "admin") {
+            replace({ pathname: "/" });
+        }
+    };
 }
 
 /*
@@ -53,21 +53,21 @@ function requireAuthAdmin() {
   This is where we hook up the Store with our actual component and the router
 */
 render(
-  <Provider store={store}>
-    { /* Tell the Router to use our enhanced history */ }
-    <Router history={history}>
-      <Route path="/" component={App}>
-        <IndexRoute component={Home} />
-        <Route path="/user" component={UserAuth} />
-        <Route path="/newpost" component={NewPost} />
-        <Route path="/post/:id" component={PostView} />
-        <Route path="/profile/:id" component={ProfileView} />
-        <Route path="/admin" component={AdminView} onEnter={requireAuthAdmin()} />
-      </Route>
-      <Route path="/*" component={FourOFour} />
-    </Router>
-  </Provider>,
-  document.getElementById('root')
+    <Provider store={store}>
+        { /* Tell the Router to use our enhanced history */ }
+        <Router history={history}>
+            <Route path="/" component={App}>
+                <IndexRoute component={Home} />
+                <Route path="/user" component={UserAuth} />
+                <Route path="/newpost" component={NewPost} />
+                <Route path="/post/:id" component={PostView} />
+                <Route path="/profile/:id" component={ProfileView} />
+                <Route path="/admin" component={AdminView} onEnter={requireAuthAdmin()} />
+            </Route>
+            <Route path="/*" component={FourOFour} />
+        </Router>
+    </Provider>,
+    document.getElementById('root')
 );
 
 /*

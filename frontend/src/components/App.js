@@ -30,23 +30,23 @@ import Main from './Main';
 */
 
 function mapStateToProps(state) {
-  return {user: state.user};
+    return {user: state.user};
 }
 
 /*
-  This will bind our actions to dispatch (make the fire-able)
-  and make the actions available via props
+This will bind our actions to dispatch (make the fire-able)
+and make the actions available via props
 */
 
 export function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actionCreators, dispatch);
+    return bindActionCreators(actionCreators, dispatch);
 }
 
 /*
-  Here we create an <App/> component which is just our <Main/> component with it's props
-  populated with our actions and our state
+Here we create an <App/> component which is just our <Main/> component with it's props
+populated with our actions and our state
 
-  We're injecting the data at the top level and passing it down, but you can connect() any component to make the actions and the store available to you.
+We're injecting the data at the top level and passing it down, but you can connect() any component to make the actions and the store available to you.
 */
 
 var App = connect(mapStateToProps, mapDispatchToProps)(Main);

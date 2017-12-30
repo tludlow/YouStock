@@ -15,9 +15,7 @@ import {loadState, saveState} from "./localStorage";
   2. An optional starting state - similar to React's getInitialState
 */
 
-const enhancers = compose(applyMiddleware(thunk), window.devToolsExtension
-  ? window.devToolsExtension()
-  : f => f);
+const enhancers = compose(applyMiddleware(thunk), window.devToolsExtension ? window.devToolsExtension() : f => f);
 
 // Define the initial state here so that there isnt an error when referencing it
 // in components
@@ -41,53 +39,51 @@ const store = createStore(rootReducer, {...initialState, ...persistedState}, enh
 export const history = syncHistoryWithStore(browserHistory, store);
 
 /*
-  Enable Hot Reloading for the reducers
-  We re-require() the reducers whenever any new code has been written.
-  Webpack will handle the rest
+Enable Hot Reloading for the reducers
+We re-require() the reducers whenever any new code has been written.
+Webpack will handle the rest
 */
 
 if (module.hot) {
-  module.hot.accept('./reducers/', () => {
-    const nextRootReducer = require('./reducers/index').default;
-    store.replaceReducer(nextRootReducer);
-  });
+    module.hot.accept('./reducers/', () => {
+        const nextRootReducer = require('./reducers/index').default;
+        store.replaceReducer(nextRootReducer);
+    });
 }
 
+//Refresh state every 1s
 store.subscribe(throttle(() => {
-  const state = store.getState();
-
-
-
-  var toSave = {
-    user: {
-      loggedIn: state.user.loggedIn,
-      loading: state.user.loading,
-      errors: "",
-      username: state.user.username,
-      token: state.user.token,
-      rank: state.user.rank,
-    }
-  };
-  // var userAssigner = "";
-  // if (typeof state.user.data.username !== "undefined") {
-  //   userAssigner = state.user.data.username;
-  // }
-  // const stateToPersist = {
-  //   user: {
-  //     loading: false,
-  //     isLoggedIn: state.user.isLoggedIn,
-  //     error: "",
-  //     data: {
-  //       username: userAssigner,
-  //       verified: state.user.data.verified
-  //     }
-  //   },
-  //   jobs: {
-  //     loading: false,
-  //     data: state.jobs.data
-  //   }
-  // };
-  saveState(toSave);
-}, 500));
+    const state = store.getState();
+    var toSave = {
+        user: {
+            loggedIn: state.user.loggedIn,
+            loading: state.user.loading,
+            errors: "",
+            username: state.user.username,
+            token: state.user.token,
+            rank: state.user.rank,
+        }
+    };
+    // var userAssigner = "";
+    // if (typeof state.user.data.username !== "undefined") {
+    //   userAssigner = state.user.data.username;
+    // }
+    // const stateToPersist = {
+    //   user: {
+    //     loading: false,
+    //     isLoggedIn: state.user.isLoggedIn,
+    //     error: "",
+    //     data: {
+    //       username: userAssigner,
+    //       verified: state.user.data.verified
+    //     }
+    //   },
+    //   jobs: {
+    //     loading: false,
+    //     data: state.jobs.data
+    //   }
+    // };
+    saveState(toSave);
+}, 1000));
 
 export default store;
