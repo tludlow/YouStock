@@ -47,6 +47,7 @@ function mapStateToProps(state) {
 	return {user: state.user};
 }
 
+
 export function mapDispatchToProps(dispatch) {
 	return bindActionCreators(actionCreators, dispatch);
 }

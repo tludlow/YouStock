@@ -10,6 +10,9 @@ import * as actionCreators from '../actions/actionCreators';
 
 import Main from './Main';
 
+//Import scss
+import "../styles/main.scss";
+
 /*
   Mapping
 

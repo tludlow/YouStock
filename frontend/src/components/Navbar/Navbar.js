@@ -11,9 +11,11 @@ class Navbar extends Component {
 		this.props.logoutUser();
 		browserHistory.push("/");
 	}
+
 	navigateUser(path) {
 		browserHistory.push(path);
 	}
+
 	adminNavigate() {
 		if(this.props.user.rank === "admin")  {
 			browserHistory.push("/admin");
@@ -33,8 +35,9 @@ class Navbar extends Component {
 		//{this.props.user.loggedIn ? <li className="nav-username">{this.props.user.username} </li> : ""}
 		//{this.props.user.loggedIn ? <li onClick={()=> this.logoutUser()}><i className="fa fa-arrow-down logout-button"></i></li> : ""}
 	}
-	render() {
 
+	
+	render() {
 		//Render the html navbar to the user.
 		return (
 			<div>
